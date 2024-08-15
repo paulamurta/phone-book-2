@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(255)
+  email     String   @unique @db.VarChar(256)
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups   Group[]
+  contacts Contact[]
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(50)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  contacts Contact[]
+}
+
+model Contact {
+  id          String        @id @default(uuid())
+  fullName    String        @db.VarChar(200)
+  photoData   Bytes
+  birthday    DateTime      @db.Date
+  phoneNumber String        @db.VarChar(14)
+  email       String        @db.VarChar(255)
+  favorit     Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  photo       ContactPhoto?
+
+  ownerId String
+  groupId String
+
+  owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model ContactPhoto {
+  id        String @id @default(uuid())
+  mimeType  String
+  photoData Bytes
+  contactId String @unique
+
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

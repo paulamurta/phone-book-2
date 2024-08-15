@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backgroundImage from "../../assets/maxim-ilyahov-0aRycsfH57A-unsplash.jpg";
+import backgroundImage from "../../assets/images/maxim-ilyahov-0aRycsfH57A-unsplash.jpg";
 
 export const Background = styled.div`
   display: flex;
@@ -8,8 +8,20 @@ export const Background = styled.div`
   align-items: flex-end;
   width: 100vw;
   height: 100vh;
+  position: relative;
   background: url(${backgroundImage}) no-repeat center center fixed;
   background-size: cover;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+  }
 `;
 
 export const GlassHeader = styled.div`
@@ -25,6 +37,7 @@ export const GlassHeader = styled.div`
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(4.5px);
   -webkit-backdrop-filter: blur(6.3px);
+  z-index: 1;
 `;
 
 export const HeaderButton = styled.button`
@@ -54,6 +67,20 @@ export const Content = styled.div`
   height: 100%;
   gap: 6vh;
   padding-right: 5vw;
+  z-index: 1;
+
+  .logo-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10vh;
+  }
+
+  .login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3vh;
+  }
 `;
 
 export const TextContainer = styled.div`
@@ -61,5 +88,15 @@ export const TextContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  gap: 2vh;
+`;
+
+export const LoginContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30vw;
+  height: 50vh;
+  background-color: ${({ theme }) => theme.colors.login.boxBg};
+  border-radius: 2vh;
 `;

@@ -14,7 +14,11 @@ import { EditContactModalProps } from "./types";
 import { useQuery } from "react-query";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
 
-export function ModalEditContact({ isModalActive, closeModal, keyId }: EditContactModalProps) {
+export function ModalEditContact({
+  isModalActive,
+  closeModal,
+  keyId,
+}: EditContactModalProps) {
   const modalRoot = document.getElementById("modal") as HTMLElement;
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
@@ -50,7 +54,9 @@ export function ModalEditContact({ isModalActive, closeModal, keyId }: EditConta
   const isThereANewPhone = phone !== data?.data.phone;
 
   const isFormValid =
-    isThereANewFirstName || isThereANewLastName || (isThereANewPhone && phone.length === 10);
+    isThereANewFirstName ||
+    isThereANewLastName ||
+    (isThereANewPhone && phone.length === 10);
 
   function handleCancelModal() {
     setIsModalConfirmOpen(false);
@@ -74,7 +80,7 @@ export function ModalEditContact({ isModalActive, closeModal, keyId }: EditConta
 
     await api
       .put(`/contacts/${keyId}`, body)
-      .then(async (res) => {
+      .then(async () => {
         toast.success("User updated successfully!");
         refetch();
       })
@@ -141,7 +147,12 @@ export function ModalEditContact({ isModalActive, closeModal, keyId }: EditConta
           />
 
           <ButtonsBox>
-            <ButtonConfirm label={"Save"} type="submit" disabled={!isFormValid} width="15vw" />
+            <ButtonConfirm
+              label={"Save"}
+              type="submit"
+              disabled={!isFormValid}
+              width="15vw"
+            />
             <ButtonCancel
               label={"Cancel"}
               type="button"

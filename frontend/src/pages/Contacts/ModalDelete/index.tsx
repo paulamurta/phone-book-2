@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
 import { ModalDeleteProps } from "./types";
-import { useState, useEffect, FormEvent } from "react";
+import { useState } from "react";
 import { Body3, Header4 } from "../../../styles/typography";
 import { Button, WrapperConfirm, WrapperText } from "./styles";
 import { useTheme } from "styled-components";
@@ -17,7 +17,7 @@ export function ModalDeleteContact({
   lastName,
 }: ModalDeleteProps) {
   const modalRoot = document.getElementById("modal") as HTMLElement;
-  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
+  const [_isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const { colors: theme } = useTheme();
 
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export function ModalDeleteContact({
   async function onSaveFields() {
     await api
       .delete(`/contacts/${keyId}`)
-      .then(async (res) => {
+      .then(async () => {
         toast.success("User deleted successfully!");
       })
       .catch((error) => {
@@ -63,14 +63,14 @@ export function ModalDeleteContact({
         </WrapperText>
         <SmallButtonsBox>
           <Button
-            fontcolor={theme.danger.main}
+            $fontColor={theme.danger.main}
             hovercolor={theme.background.mediumGray}
             onClick={handleSubmit}
           >
             Yes
           </Button>
           <Button
-            fontcolor={theme.typography.darkGray}
+            $fontColor={theme.typography.darkGray}
             hovercolor={theme.background.mediumGray}
             onClick={handleCloseModal}
           >

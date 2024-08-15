@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
 import { api } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { NewContactModalProps } from "./types";
 import { ButtonsBox, FormModal, OverlayModal } from "../../../styles/global";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
@@ -13,7 +13,10 @@ import { MaskInput } from "../../../components/Input/Mask";
 import { WrapperModal } from "./styles";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
 
-export function ModalNewContact({ isModalActive, closeModal }: NewContactModalProps) {
+export function ModalNewContact({
+  isModalActive,
+  closeModal,
+}: NewContactModalProps) {
   const modalRoot = document.getElementById("modal") as HTMLElement;
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
@@ -47,7 +50,7 @@ export function ModalNewContact({ isModalActive, closeModal }: NewContactModalPr
     await api
       .post(`/contacts`, body)
 
-      .then(async (res) => {
+      .then(async () => {
         toast.success("User created successfully!");
       })
       .catch((error) => {
@@ -112,7 +115,12 @@ export function ModalNewContact({ isModalActive, closeModal }: NewContactModalPr
           />
 
           <ButtonsBox>
-            <ButtonConfirm label={"Save"} type="submit" disabled={!isFormValid} width="15vw" />
+            <ButtonConfirm
+              label={"Save"}
+              type="submit"
+              disabled={!isFormValid}
+              width="15vw"
+            />
             <ButtonCancel
               label={"Cancel"}
               type="button"

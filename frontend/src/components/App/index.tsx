@@ -1,10 +1,12 @@
-import "../../assets/styles/global";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { getTokenLocalStorage } from "../../context/AuthContext/utils.ts";
-import { Routes } from "../../routes";
-import { ToastContainer } from "../ToastContainer/index.tsx";
-import Providers from "../../context/Providers/index.tsx";
+import { AuthProvider } from "../../contexts/AuthContext";
+import { getTokenLocalStorage } from "../../contexts/AuthContext/utils";
+import { ToastContainer } from "../ToastContainer";
+import RoutesMain from "../../routes";
+import { ThemeProvider } from "styled-components";
+import { theme } from "../../styles/themes/theme";
+import GlobalStyle from "../../styles/global";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,16 +21,19 @@ export default function App() {
 
   useEffect(() => {
     if (tokenByLocalStorage && window.location.pathname === "/login") {
-      window.location.href = "/home";
+      window.location.href = "/contacts";
     }
   }, [tokenByLocalStorage]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Providers>
+      <ThemeProvider theme={theme}>
         <ToastContainer />
-        <Routes />
-      </Providers>
+        <GlobalStyle />
+        <AuthProvider>
+          <RoutesMain />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

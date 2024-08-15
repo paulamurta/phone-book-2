@@ -101,12 +101,12 @@ export const ContainerRow = styled.div<IContainer>`
           justify-content: flex-start;
         `
       : props.position === "right"
-        ? css`
-            justify-content: flex-end;
-          `
-        : css`
-            justify-content: space-between;
-          `}
+      ? css`
+          justify-content: flex-end;
+        `
+      : css`
+          justify-content: space-between;
+        `}
 `;
 
 export const ContainerColumn = styled.div<IContainer>`
@@ -122,12 +122,12 @@ export const ContainerColumn = styled.div<IContainer>`
           justify-content: flex-start;
         `
       : props.position === "bottom"
-        ? css`
-            justify-content: flex-end;
-          `
-        : css`
-            justify-content: center;
-          `}
+      ? css`
+          justify-content: flex-end;
+        `
+      : css`
+          justify-content: center;
+        `}
 `;
 
 export const LogoBox = styled.div`

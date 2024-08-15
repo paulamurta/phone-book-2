@@ -88,7 +88,9 @@ const Contacts = () => {
           <Content>
             <LogoBox>
               <BiSolidContact />
-              <Header1 fontcolor={theme.typography.body}>Phone Book App</Header1>
+              <Header1 $fontColor={theme.typography.body}>
+                Phone Book App
+              </Header1>
             </LogoBox>
 
             <ContainerRow>

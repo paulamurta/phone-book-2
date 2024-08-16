@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import { Search } from "../../components/Input/Search";
 import { ContainerRow, LogoBox } from "../../styles/global";
-import { Header3, Header1 } from "../../styles/typography";
-import { Background, Content, List } from "./styles";
+import { Header3, Header1, Body3, Small } from "../../styles/typography";
+import {
+  Background,
+  Content,
+  Header,
+  List,
+  SignOutButton,
+  UserInfo,
+} from "./styles";
 import { motion } from "framer-motion";
 import { BiSolidContact } from "react-icons/bi";
 import { useTheme } from "styled-components";
@@ -14,8 +21,10 @@ import { ModalNewContact } from "./ModalNew";
 import { ButtonConfirm } from "../../components/Button/ButtonConfirm";
 import { ModalEditContact } from "./ModalEdit";
 import { ModalDeleteContact } from "./ModalDelete";
+import { SignOut } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
 
-const Contacts = () => {
+function Contacts() {
   const { colors: theme } = useTheme();
   const [searchParam, setSearchParam] = useState("");
   const [contacts, setContacts] = useState<IContact[]>([]);
@@ -25,6 +34,7 @@ const Contacts = () => {
   const [id, setId] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const navigate = useNavigate();
 
   const { refetch } = useQuery(
     ["contacts", searchParam],
@@ -84,6 +94,17 @@ const Contacts = () => {
         exit={{ opacity: 0, x: "-100%" }}
         transition={{ duration: 1 }}
       >
+        <Header>
+          <UserInfo>
+            <Body3 $fontColor={theme.typography.white}>John Snow</Body3>
+            <Small $bold $fontColor={theme.typography.white}>
+              john@snow.com
+            </Small>
+          </UserInfo>
+          <SignOutButton onClick={() => navigate("/home")}>
+            <SignOut weight={"bold"} />
+          </SignOutButton>
+        </Header>
         <Background>
           <Content>
             <LogoBox>
@@ -132,6 +153,6 @@ const Contacts = () => {
       </motion.div>
     </>
   );
-};
+}
 
 export default Contacts;

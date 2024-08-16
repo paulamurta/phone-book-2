@@ -6,10 +6,10 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 100%;
   background-color: transparent;
   text-align: left;
   gap: 1vh;
+  width: 100%;
 `;
 
 export const InputContainer = styled.div<IContainer>`
@@ -36,5 +36,19 @@ export const InputContainer = styled.div<IContainer>`
     font-size: clamp(0.2rem, 0.17rem + 1.8vh, 3rem);
     font-family: "Inter 400";
     background-color: transparent;
+  }
+`;
+
+export const IconButton = styled.button`
+  right: 1vw;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  svg {
+    color: ${({ theme }) => theme.colors.light.main};
+    height: 1.3vw;
+    width: 1.3vw;
   }
 `;

@@ -3,7 +3,7 @@ export const theme = {
     typography: {
       body: "#222529",
       lightGray: "#B5B6B7",
-      darkGray: "#00233B",
+      darkGray: "#44494c",
       blueGray: "#D9E1E7",
       white: "#ffffff",
     },
@@ -30,7 +30,7 @@ export const theme = {
     },
 
     login: {
-      boxBg: "#00233B",
+      boxBg: "#ffffff",
     },
 
     primary: {

@@ -1,8 +1,4 @@
 import { useTheme } from "styled-components";
-import { FiInstagram } from "react-icons/fi";
-import { FiFacebook } from "react-icons/fi";
-import { FiMail } from "react-icons/fi";
-
 import { ContainerRow } from "../../styles/global";
 import { motion } from "framer-motion";
 import { Header1, Header2 } from "../../styles/typography";
@@ -13,12 +9,18 @@ import {
   TextContainer,
   HeaderButton,
 } from "./styles";
-import { EnterButton } from "../../components/Button/EnterButton";
-import { useState } from "react";
-import { ArrowRight, AddressBook } from "@phosphor-icons/react";
-import LoginBox from "./Components/LoginBox";
 
-export default function Login() {
+import { useState } from "react";
+import {
+  ArrowRight,
+  InstagramLogo,
+  FacebookLogo,
+  Envelope,
+} from "@phosphor-icons/react";
+import LoginBox from "./Components/LoginBox";
+import { CommonButton } from "../../components/Button/CommonButton";
+
+export default function Home() {
   const [isLoginShown, setIsLoginShown] = useState<boolean>(false);
   const { colors: theme } = useTheme();
 
@@ -33,13 +35,13 @@ export default function Login() {
         <GlassHeader>
           <ContainerRow position={"left"}>
             <HeaderButton>
-              <FiInstagram />
+              <InstagramLogo />
             </HeaderButton>
             <HeaderButton>
-              <FiFacebook />
+              <FacebookLogo />
             </HeaderButton>
             <HeaderButton>
-              <FiMail />
+              <Envelope />
             </HeaderButton>
           </ContainerRow>
           <ContainerRow position={"right"}>
@@ -64,6 +66,7 @@ export default function Login() {
                   Phone Book App
                 </Header1>
               </>
+
               <TextContainer>
                 <Header2 $fontColor={theme.typography.lightGray}>
                   Your contacts list.
@@ -76,7 +79,7 @@ export default function Login() {
                 </Header2>
               </TextContainer>
 
-              <EnterButton
+              <CommonButton
                 width={"100%"}
                 text={"LOGIN"}
                 icon={<ArrowRight />}

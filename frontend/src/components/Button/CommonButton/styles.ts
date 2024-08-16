@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 interface IButton {
   $width?: string;
+  $color?: string;
 }
 
 export const Button = styled.button<IButton>`
@@ -12,12 +13,14 @@ export const Button = styled.button<IButton>`
   gap: 0.5vw;
   padding: 1vw;
   display: flex;
-  color: ${({ theme }) => theme.colors.typography.white};
+  color: ${({ $color, theme }) =>
+    $color ? $color : theme.colors.typography.white};
   background-color: transparent;
   border-radius: 30px;
   font-size: clamp(0.1rem, 0.1rem + 1.8vh, 1.3rem);
   cursor: pointer;
-  border: 1px solid ${({ theme }) => theme.colors.typography.white};
+  border: 1px solid
+    ${({ theme, $color }) => ($color ? $color : theme.colors.typography.white)};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.typography.white};

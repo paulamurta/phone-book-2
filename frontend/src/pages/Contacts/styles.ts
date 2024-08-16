@@ -12,6 +12,37 @@ export const Background = styled.div`
   background-color: ${theme.colors.background.white};
 `;
 
+export const Header = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  height: 7vh;
+  gap: 2vh;
+  padding-right: 1vw;
+  background-color: ${theme.colors.primary.main};
+`;
+
+export const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+`;
+
+export const SignOutButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: ${theme.colors.background.mediumGray};
+  height: 3vh;
+  width: 3vh;
+
+  svg {
+    height: 100%;
+    width: 100%;
+  }
+`;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;

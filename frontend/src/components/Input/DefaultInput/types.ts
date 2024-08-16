@@ -7,6 +7,7 @@ export type DefaultInputProps = {
   message?: string;
   onChange: (value: string) => void;
   value?: string;
+  type?: string;
 };
 
 export interface IContainer {

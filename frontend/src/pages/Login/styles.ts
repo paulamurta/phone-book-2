@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import backgroundImage from "../../assets/images/maxim-ilyahov-0aRycsfH57A-unsplash.jpg";
 
+interface ITextContainer {
+  $alignItems?: string;
+}
+
 export const Background = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,7 +23,7 @@ export const Background = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(96, 96, 96, 0.5);
     z-index: 0;
   }
 `;
@@ -83,20 +87,22 @@ export const Content = styled.div`
   }
 `;
 
-export const TextContainer = styled.div`
+export const TextContainer = styled.div<ITextContainer>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: ${({ $alignItems }) => ($alignItems ? $alignItems : "flex-end")};
 `;
 
-export const LoginContainer = styled.div`
+export const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: flex-start; */
+  align-items: flex-end;
+  width: 100%;
+  gap: 4vh;
+  padding: 2vw;
   width: 30vw;
-  height: 50vh;
   background-color: ${({ theme }) => theme.colors.login.boxBg};
   border-radius: 2vh;
 `;

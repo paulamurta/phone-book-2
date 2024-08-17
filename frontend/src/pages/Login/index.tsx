@@ -33,7 +33,7 @@ export default function Home() {
     >
       <Background>
         <GlassHeader>
-          <ContainerRow position={"left"}>
+          <ContainerRow $position={"left"}>
             <HeaderButton>
               <InstagramLogo />
             </HeaderButton>
@@ -44,7 +44,7 @@ export default function Home() {
               <Envelope />
             </HeaderButton>
           </ContainerRow>
-          <ContainerRow position={"right"}>
+          <ContainerRow $position={"right"}>
             <HeaderButton>About</HeaderButton>
             <HeaderButton>FAQ</HeaderButton>
             <HeaderButton>Pricing</HeaderButton>

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 interface IButton {
   $fontColor?: string;
-  hovercolor?: string;
+  $hovercolor?: string;
 }
 
 export const Button = styled.button<IButton>`
@@ -17,7 +17,7 @@ export const Button = styled.button<IButton>`
   transition: background-color 0.2s ease-in;
 
   &:hover {
-    background-color: ${({ hovercolor }) => hovercolor};
+    background-color: ${({ $hovercolor }) => $hovercolor};
     transition: background-color 0.2s ease-in;
   }
 `;

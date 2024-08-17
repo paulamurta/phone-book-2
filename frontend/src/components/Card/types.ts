@@ -16,4 +16,6 @@ export type CardProps = {
   setModalEditContact: Dispatch<SetStateAction<boolean>>;
   modalDeleteContact: boolean;
   setModalDeleteContact: Dispatch<SetStateAction<boolean>>;
+  favorite?: boolean;
+  setFavorite?: Dispatch<SetStateAction<boolean>>;
 };

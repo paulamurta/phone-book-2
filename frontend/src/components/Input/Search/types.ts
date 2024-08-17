@@ -5,5 +5,5 @@ export type SearchProps = {
 };
 
 export interface IContainer {
-  size?: string;
+  $size?: string;
 }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { IContainer } from "./types";
 
 export const Container = styled.div<IContainer>`
-  width: ${({ size }) => (size ? size : "100%")};
+  width: ${({ $size }) => ($size ? $size : "100%")};
   display: flex;
   height: 6vh;
   padding: 0.5vw 1vw;

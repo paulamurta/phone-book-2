@@ -11,6 +11,6 @@ export type DefaultInputProps = {
 };
 
 export interface IContainer {
-  height?: string;
-  width?: string;
+  $height?: string;
+  $width?: string;
 }

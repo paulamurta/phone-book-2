@@ -96,11 +96,11 @@ export const ContainerRow = styled.div<IContainer>`
   width: 100%;
   gap: 1vw;
   ${(props) =>
-    props.position === "left"
+    props.$position === "left"
       ? css`
           justify-content: flex-start;
         `
-      : props.position === "right"
+      : props.$position === "right"
       ? css`
           justify-content: flex-end;
         `
@@ -117,11 +117,11 @@ export const ContainerColumn = styled.div<IContainer>`
   width: 100%;
   gap: 1vh;
   ${(props) =>
-    props.position === "top"
+    props.$position === "top"
       ? css`
           justify-content: flex-start;
         `
-      : props.position === "bottom"
+      : props.$position === "bottom"
       ? css`
           justify-content: flex-end;
         `
@@ -133,10 +133,11 @@ export const ContainerColumn = styled.div<IContainer>`
 export const LogoBox = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 0.5vw;
   margin-bottom: 4vh;
+  width: 100%;
 
   svg {
     color: ${({ theme }) => theme.colors.typography.body};

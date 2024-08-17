@@ -13,7 +13,7 @@ export function Search({ inputWidth, message, onSearch }: SearchProps) {
   }
 
   return (
-    <Container size={inputWidth}>
+    <Container $size={inputWidth}>
       <IconBox>
         <MagnifyingGlass />
       </IconBox>

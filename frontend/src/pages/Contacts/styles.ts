@@ -47,11 +47,11 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 70%;
   height: 100%;
-  padding: 3vw;
-  gap: 4vh;
+  padding: 2vw;
+  gap: 2.5vh;
   background-color: ${theme.colors.background.mediumGray};
   border-radius: 3vh;
 `;

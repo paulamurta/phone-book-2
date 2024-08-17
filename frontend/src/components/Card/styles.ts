@@ -1,6 +1,10 @@
 import styled, { css } from "styled-components";
 import { ActionButtonProps } from "./types";
 
+export interface IFavorite {
+  $favorite: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -28,8 +32,28 @@ export const PhoneContainer = styled.div`
   font-size: clamp(0.6rem, 0.5rem + 2.3vh, 1.8rem);
 
   svg {
-    height: clamp(0.4rem, 0.3rem + 1.6vh, 1.5rem);
-    width: clamp(0.4rem, 0.3rem + 1.6vh, 1.5rem);
+    height: 2.5vh;
+    width: 2.5vh;
+  }
+`;
+
+export const FavoriteButton = styled.button<IFavorite>`
+  display: flex;
+  height: 4vh;
+  width: 4vh;
+  background-color: transparent;
+  border: none;
+
+  svg {
+    height: 100%;
+    width: 100%;
+    color: ${({ $favorite, theme }) =>
+      $favorite ? theme.colors.danger.main : theme.colors.border.main};
+
+    &:hover {
+      color: ${({ $favorite, theme }) =>
+        $favorite ? theme.colors.danger.light : "pink"};
+    }
   }
 `;
 

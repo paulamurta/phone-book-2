@@ -7,7 +7,7 @@ interface ITypography {
 
 export const Header1 = styled.h1<ITypography>`
   ${({ theme, $fontColor }) => css`
-    font-size: clamp(1.2rem, 1.2rem + 5.3vh, 4.2rem);
+    font-size: clamp(7.5vh, 1rem + 5vh, 6vh);
     font-family: "Inter 800", sans-serif;
     color: ${$fontColor ? $fontColor : theme.colors.typography.body};
   `}

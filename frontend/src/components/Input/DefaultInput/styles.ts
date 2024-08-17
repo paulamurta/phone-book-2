@@ -13,8 +13,8 @@ export const Container = styled.div`
 `;
 
 export const InputContainer = styled.div<IContainer>`
-  width: ${({ width }) => (width ? width : "100%")};
-  height: ${({ height }) => (height ? height : "5vh")};
+  width: ${({ $width }) => ($width ? $width : "100%")};
+  height: ${({ $height }) => ($height ? $height : "5vh")};
   display: flex;
   padding: 0.5vw 1vw;
   border-radius: 3vh;

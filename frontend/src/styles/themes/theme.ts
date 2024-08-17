@@ -48,6 +48,7 @@ export const theme = {
     },
     background: {
       darkGray: "#CBCBCB",
+      gray: "#eaeaea",
       mediumGray: "#F6F6F6",
       white: "#ffffff",
     },

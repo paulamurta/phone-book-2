@@ -1,3 +1,3 @@
 export interface IContainer {
-  position?: string;
+  $position?: string;
 }

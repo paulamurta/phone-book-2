@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Search } from "../../components/Input/Search";
 import { ContainerRow, LogoBox } from "../../styles/global";
 import { Header3, Header1, Body3, Small, Body1 } from "../../styles/typography";
@@ -24,6 +24,7 @@ import { ModalDeleteContact } from "./ModalDelete";
 import { SignOut } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/Api";
+import { Tabs } from "../../components/Tabs";
 
 function Contacts() {
   const { colors: theme } = useTheme();
@@ -35,6 +36,7 @@ function Contacts() {
   const [id, setId] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [favorites, setFavorites] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const { refetch } = useQuery(
@@ -49,7 +51,6 @@ function Contacts() {
     },
     {
       onSuccess: (dataOnSuccess) => {
-        console.log("dataOnSuccess: ", dataOnSuccess);
         setContacts(dataOnSuccess?.data);
       },
 
@@ -57,37 +58,6 @@ function Contacts() {
       staleTime: 2000,
     },
   );
-
-  // const { refetch: refetchPendencies } = useQuery(
-  //   ["pendencies", searchParam],
-  //   () => getPendencies(searchParam),
-  //   {
-  //     onSuccess: (dataOnSuccess) => {
-  //       if (dataOnSuccess) {
-  //         const newData = dataOnSuccess?.data.map((item: any) => ({
-  //           id: item.id,
-  //           email: item.email,
-  //           name: item.name,
-  //           last_name: item.last_name,
-  //           image: item.image ? item.image : null,
-  //           profile: {
-  //             identifier: item.user_profile[0].profiles.identifier,
-  //             description: item.user_profile[0].profiles.description,
-  //           },
-  //           institution: item.institution ? item.institution : null,
-  //         }));
-
-  //         setListData(newData);
-  //         setPendencies(newData.length);
-  //       }
-  //     },
-  //     enabled: isChiefResearcher || isManager,
-  //   },
-  // );
-
-  useEffect(() => {
-    refetch();
-  }, [searchParam, refetch]);
 
   return (
     <>
@@ -155,6 +125,7 @@ function Contacts() {
               />
             </ContainerRow>
 
+            <Tabs favorites={favorites} setFavorites={setFavorites} />
             <Search
               message={"Search for contact by last name..."}
               onSearch={(value) => {
@@ -177,6 +148,8 @@ function Contacts() {
                   setFirstName={setFirstName}
                   setLastName={setLastName}
                   id={contact.id}
+                  favorite={false}
+                  setFavorite={() => {}}
                 />
               ))}
             </List>

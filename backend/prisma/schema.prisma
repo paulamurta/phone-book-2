@@ -41,20 +41,19 @@ model Contact {
   id          String        @id @default(uuid())
   firstName   String        @db.VarChar(100)
   lastName    String        @db.VarChar(200)
-  photoData   Bytes
-  birthday    DateTime      @db.Date
-  phoneNumber String        @db.VarChar(15)
-  email       String        @db.VarChar(254)
-  favorit     Boolean       @default(false)
+  phoneNumber String        @unique @db.VarChar(15)
+  favorite    Boolean       @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  birthday    DateTime?     @db.Date
+  email       String?       @unique @db.VarChar(254)
   photo       ContactPhoto?
 
   ownerId String
-  groupId String
+  groupId String?
 
   owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  group Group @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  group Group? @relation(fields: [groupId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ContactPhoto {

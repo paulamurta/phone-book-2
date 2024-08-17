@@ -39,11 +39,12 @@ model Group {
 
 model Contact {
   id          String        @id @default(uuid())
-  fullName    String        @db.VarChar(200)
+  firstName   String        @db.VarChar(100)
+  lastName    String        @db.VarChar(200)
   photoData   Bytes
   birthday    DateTime      @db.Date
-  phoneNumber String        @db.VarChar(14)
-  email       String        @db.VarChar(255)
+  phoneNumber String        @db.VarChar(15)
+  email       String        @db.VarChar(254)
   favorit     Boolean       @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt

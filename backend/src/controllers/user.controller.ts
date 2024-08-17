@@ -15,12 +15,12 @@ export class UserController {
       const userData = await newUserSerializer.validate(req.body);
       const result = await this.userService.createUser(userData);
       return res.status(201).send({ ...result, password: undefined });
-    } catch (err) {
+    } catch (err: any) {
       if (err instanceof ValidationError) {
         return res.status(400).send({ message: err.message });
       }
 
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ message: (err as Error)?.message });
     }
   }
 
@@ -40,7 +40,7 @@ export class UserController {
         return res.status(400).send({ message: err.message });
       }
 
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ message: (err as Error)?.message });
     }
   }
 }

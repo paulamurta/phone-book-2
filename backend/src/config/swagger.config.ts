@@ -13,7 +13,6 @@ export const setupSwagger = (app: Application) => {
     "index.yaml"
   );
 
-  console.log("file path ", swaggerFilePath);
   const swaggerDocument = yaml.load(swaggerFilePath);
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 };

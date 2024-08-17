@@ -1,7 +1,7 @@
 {
   "main": "src/app.ts",
   "scripts": {
-    "dev": "ts-node --ignore-watch node_modules src/app.ts"
+    "dev": "ts-node-dev --ignore-watch node_modules src/app.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

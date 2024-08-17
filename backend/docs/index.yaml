@@ -5,7 +5,7 @@ info:
     email: paulamurta@hotmail.com
   version: 1.0.0
 servers:
-  - url: https://localhost:3009
+  - url: http://localhost:3009
 tags:
   - name: Auth
     description: Auth related routes
@@ -16,7 +16,7 @@ tags:
   - name: Group
     description: Groups related routes
 paths:
-  /auth/auth/login:
+  /api/auth/login:
     post:
       tags:
         - Auth

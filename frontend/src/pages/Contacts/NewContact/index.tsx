@@ -1,7 +1,8 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
+import { NewContactModalProps } from "./types";
 import { ButtonsBox, FormModal, OverlayModal } from "../../../styles/global";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
 import { Header4 } from "../../../styles/typography";
@@ -9,54 +10,22 @@ import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
 import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { MaskInput } from "../../../components/Input/Mask";
 import { WrapperModal } from "./styles";
-import { EditContactModalProps } from "./types";
-import { useQuery } from "react-query";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
 import api from "../../../services/Api";
 
-export function ModalEditContact({
+export function NewContact({
   isModalActive,
   closeModal,
-  keyId,
-}: EditContactModalProps) {
+}: NewContactModalProps) {
   const modalRoot = document.getElementById("modal") as HTMLElement;
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [id, setId] = useState<string | undefined>("");
 
   const navigate = useNavigate();
 
-  const { data, refetch } = useQuery(
-    ["keyId", id, isModalActive],
-    () => {
-      return api.get(`/contacts/${id}`);
-    },
-    {
-      onSuccess: (dataOnSuccess) => {
-        if (isModalActive) {
-          setFirstName(dataOnSuccess?.data.firstName);
-          setLastName(dataOnSuccess?.data.lastName);
-          setPhone(dataOnSuccess?.data.phone);
-        }
-      },
-      keepPreviousData: false,
-    },
-  );
-
-  useEffect(() => {
-    setId(keyId);
-  }, [keyId]);
-
-  const isThereANewFirstName = firstName !== data?.data.firstName;
-  const isThereANewLastName = lastName !== data?.data.lastName;
-  const isThereANewPhone = phone !== data?.data.phone;
-
-  const isFormValid =
-    isThereANewFirstName ||
-    isThereANewLastName ||
-    (isThereANewPhone && phone.length === 10);
+  const isFormValid = firstName && lastName && phone.length === 10;
 
   function handleCancelModal() {
     setIsModalConfirmOpen(false);
@@ -79,10 +48,10 @@ export function ModalEditContact({
     };
 
     await api
-      .put(`/contacts/${keyId}`, body)
+      .post(`/contacts`, body)
+
       .then(async () => {
-        toast.success("User updated successfully!");
-        refetch();
+        toast.success("User created successfully!");
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
@@ -95,7 +64,6 @@ export function ModalEditContact({
       onSaveFields();
       setTimeout(() => {
         handleCloseModal();
-        refetch();
       }, 2000);
     } catch (error) {}
   }
@@ -110,17 +78,17 @@ export function ModalEditContact({
         isModalActive={isModalConfirmOpen}
         handleCancel={handleCancelModal}
         handleClose={handleCloseModal}
-        title="Cancel Edit Contact?"
-        message="You are leaving Edit Contact. Would you like to continue?"
+        title="Cancel Register Contact?"
+        message="You are leaving Register Contact. Would you like to continue?"
       />
       <WrapperModal>
-        <Header4>Edit Contact</Header4>
+        <Header4>Register Contact</Header4>
         <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
           <DefaultInput
             key="first-name"
             label={"First Name*"}
-            placeholder={"Barbara"}
             value={firstName}
+            placeholder={"Barbara"}
             onChange={(value) => {
               setFirstName(value);
             }}
@@ -141,7 +109,7 @@ export function ModalEditContact({
             label={"Phone Number*"}
             placeholder={"000-000-0000"}
             message={"Phone Number must be exactly a 10-digit number"}
-            onChange={(value: any) => {
+            onChange={(value) => {
               setPhone(value.replace(/-/g, ""));
             }}
           />

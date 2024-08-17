@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import Contacts from "../pages/Contacts";
-import ProtectedRoutes from "./ProtectedRoutes";
+// import ProtectedRoutes from "./ProtectedRoutes";
 import Home from "../pages/Login";
 
 export default function RoutesMain() {

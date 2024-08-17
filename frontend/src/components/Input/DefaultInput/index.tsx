@@ -30,7 +30,7 @@ export function DefaultInput({
   return (
     <Container>
       <LabelText>{label}</LabelText>
-      <InputContainer height={height} width={width}>
+      <InputContainer $height={height} $width={width}>
         <input
           type={type === "password" && showPassword ? "text" : type}
           placeholder={placeholder ? placeholder : "Insert here..."}

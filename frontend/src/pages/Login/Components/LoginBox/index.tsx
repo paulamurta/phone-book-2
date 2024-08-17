@@ -13,8 +13,10 @@ export default function LoginBox({ setIsLoginShown }: any) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { login, errorLogin, setErrorLogin, isLogout, setIsLogout, token } =
-    useAuthGlobal();
+  const {
+    login,
+    // errorLogin, setErrorLogin, isLogout, setIsLogout, token
+  } = useAuthGlobal();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

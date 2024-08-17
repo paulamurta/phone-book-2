@@ -17,14 +17,14 @@ import { useTheme } from "styled-components";
 import { useQuery } from "react-query";
 import { IContact } from "../../interfaces/IContact";
 import { Card } from "../../components/Card";
-import { ModalNewContact } from "./ModalNew";
 import { ButtonConfirm } from "../../components/Button/ButtonConfirm";
-import { ModalEditContact } from "./ModalEdit";
-import { ModalDeleteContact } from "./ModalDelete";
 import { SignOut } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/Api";
 import { Tabs } from "../../components/Tabs";
+import { NewContact } from "./NewContact";
+import { EditContact } from "./EditContact";
+import { DeleteContact } from "./DeleteContact";
 
 function Contacts() {
   const { colors: theme } = useTheme();
@@ -61,14 +61,14 @@ function Contacts() {
 
   return (
     <>
-      <ModalNewContact
+      <NewContact
         isModalActive={modalNewContact}
         closeModal={() => {
           refetch();
           setModalNewContact(false);
         }}
       />
-      <ModalEditContact
+      <EditContact
         keyId={id}
         isModalActive={modalEditContact}
         closeModal={() => {
@@ -76,7 +76,7 @@ function Contacts() {
           setModalEditContact(false);
         }}
       />
-      <ModalDeleteContact
+      <DeleteContact
         firstName={firstName}
         lastName={lastName}
         keyId={id}

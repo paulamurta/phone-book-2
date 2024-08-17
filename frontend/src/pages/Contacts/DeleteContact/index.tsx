@@ -8,7 +8,7 @@ import { OverlayModal, SmallButtonsBox } from "../../../styles/global";
 import { useNavigate } from "react-router-dom";
 import api from "../../../services/Api";
 
-export function ModalDeleteContact({
+export function DeleteContact({
   isModalActive,
   closeModal,
   keyId,

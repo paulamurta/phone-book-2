@@ -31,18 +31,18 @@ export const ModalConfirm = ({
         </WrapperText>
         <SmallButtonsBox>
           <Button
-            $fontColor={theme.typography.darkGray}
-            hovercolor={theme.background.mediumGray}
-            onClick={handleCancel}
-          >
-            No
-          </Button>
-          <Button
-            $fontColor={theme.primary.main}
+            $fontColor={theme.danger.main}
             hovercolor={theme.background.mediumGray}
             onClick={() => (handleSubmit ? handleSubmit() : handleClose())}
           >
             {isLoading ? loadingMessage : "Yes"}
+          </Button>
+          <Button
+            $fontColor={theme.primary.main}
+            hovercolor={theme.background.mediumGray}
+            onClick={handleCancel}
+          >
+            No
           </Button>
         </SmallButtonsBox>
       </WrapperConfirm>

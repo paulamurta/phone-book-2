@@ -7,13 +7,12 @@ interface IButton {
 
 export const Button = styled.button<IButton>`
   min-width: 4vw;
-  height: 3vh;
-  border-radius: 3px;
-  padding: 0 2px;
+  height: 4vh;
+  border-radius: 3vh;
   font-family: "Inter 600", sans-serif;
   font-size: clamp(0.3rem, 0.2rem + 1.3vh, 1.7rem);
   background-color: transparent;
-  border: none;
+  border: 1px solid ${({ $fontColor }) => $fontColor};
   color: ${({ $fontColor }) => $fontColor};
   transition: background-color 0.2s ease-in;
 
@@ -23,10 +22,11 @@ export const Button = styled.button<IButton>`
   }
 `;
 
-export const WrapperConfirm = styled.div`
+export const WrapperDelete = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background.white};
-  border-radius: 16px;
+  border: 1px solid ${({ theme }) => theme.colors.border.main};
+  border-radius: 3vh;
   min-height: 20%;
   max-width: 30%;
   box-shadow: 0px 3px 6px #00000029;

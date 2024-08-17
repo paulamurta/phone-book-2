@@ -39,7 +39,7 @@ export const ActionButon = styled.button<ActionButtonProps>`
   align-items: center;
   width: 3vw;
   height: 3vw;
-  border-radius: 8px;
+  border-radius: 1vh;
   color: ${({ theme }) => theme.colors.typography.white};
   font-size: clamp(0.6rem, 0.5rem + 2.3vh, 1.8rem);
   ${(props) =>

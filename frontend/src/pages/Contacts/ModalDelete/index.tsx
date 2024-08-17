@@ -1,13 +1,12 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
 import { ModalDeleteProps } from "./types";
-import { useState } from "react";
 import { Body3, Header4 } from "../../../styles/typography";
-import { Button, WrapperConfirm, WrapperText } from "./styles";
+import { Button, WrapperDelete, WrapperText } from "./styles";
 import { useTheme } from "styled-components";
 import { OverlayModal, SmallButtonsBox } from "../../../styles/global";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../api/api";
+import api from "../../../services/Api";
 
 export function ModalDeleteContact({
   isModalActive,
@@ -17,7 +16,6 @@ export function ModalDeleteContact({
   lastName,
 }: ModalDeleteProps) {
   const modalRoot = document.getElementById("modal") as HTMLElement;
-  const [_isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const { colors: theme } = useTheme();
 
   const navigate = useNavigate();
@@ -25,7 +23,6 @@ export function ModalDeleteContact({
   function handleCloseModal() {
     closeModal();
     navigate("/contacts");
-    setIsModalConfirmOpen(false);
   }
 
   async function onSaveFields() {
@@ -54,7 +51,7 @@ export function ModalDeleteContact({
 
   return ReactDOM.createPortal(
     <OverlayModal>
-      <WrapperConfirm>
+      <WrapperDelete>
         <WrapperText>
           <Header4>Are you sure you want to delete this contact?</Header4>
           <Body3>
@@ -70,14 +67,14 @@ export function ModalDeleteContact({
             Yes
           </Button>
           <Button
-            $fontColor={theme.typography.darkGray}
+            $fontColor={theme.primary.main}
             hovercolor={theme.background.mediumGray}
             onClick={handleCloseModal}
           >
             No
           </Button>
         </SmallButtonsBox>
-      </WrapperConfirm>
+      </WrapperDelete>
     </OverlayModal>,
     modalRoot,
   );

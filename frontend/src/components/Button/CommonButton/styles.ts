@@ -16,7 +16,7 @@ export const Button = styled.button<IButton>`
   color: ${({ $color, theme }) =>
     $color ? $color : theme.colors.typography.white};
   background-color: transparent;
-  border-radius: 30px;
+  border-radius: 50vh;
   font-size: clamp(0.1rem, 0.1rem + 1.8vh, 1.3rem);
   cursor: pointer;
   border: 1px solid

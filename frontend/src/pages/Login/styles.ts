@@ -97,7 +97,6 @@ export const TextContainer = styled.div<ITextContainer>`
 export const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
-  /* justify-content: flex-start; */
   align-items: flex-end;
   width: 100%;
   gap: 4vh;

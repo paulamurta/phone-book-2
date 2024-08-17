@@ -17,7 +17,7 @@ export const InputContainer = styled.div<IContainer>`
   height: ${({ height }) => (height ? height : "5vh")};
   display: flex;
   padding: 0.5vw 1vw;
-  border-radius: 12px;
+  border-radius: 3vh;
   outline: 1.5px solid ${({ theme }) => theme.colors.border.main};
   transition: all 0.2s ease-in;
   background-color: transparent;

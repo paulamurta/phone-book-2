@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../api/api";
 import { setTokenLocalStorage, setUserIdLocalStorage } from "./utils";
 import toast from "react-hot-toast";
 import { IAuthContext, IAuthProvider } from "./types";
+import api from "../../services/Api";
 import { whoAmI } from "../../services/auth.service";
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);

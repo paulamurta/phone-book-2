@@ -53,7 +53,7 @@ export const Content = styled.div`
   padding: 3vw;
   gap: 4vh;
   background-color: ${theme.colors.background.mediumGray};
-  border-radius: 8px;
+  border-radius: 3vh;
 `;
 
 export const List = styled.div`
@@ -77,4 +77,14 @@ export const List = styled.div`
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
   }
+`;
+
+export const AvatarContainer = styled.div`
+  height: 4.5vh;
+  width: 4.5vh;
+  border-radius: 50%;
+  background-color: ${theme.colors.light.light};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

@@ -6,7 +6,7 @@ export const Container = styled.div<IContainer>`
   display: flex;
   height: 6vh;
   padding: 0.5vw 1vw;
-  border-radius: 8px;
+  border-radius: 1vh;
   outline: 1.5px solid ${({ theme }) => theme.colors.border.main};
   transition: all 0.2s ease-in;
   background-color: ${({ theme }) => theme.colors.background.white};

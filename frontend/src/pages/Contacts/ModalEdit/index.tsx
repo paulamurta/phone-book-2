@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
-import { api } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect } from "react";
 import { ButtonsBox, FormModal, OverlayModal } from "../../../styles/global";
@@ -13,6 +12,7 @@ import { WrapperModal } from "./styles";
 import { EditContactModalProps } from "./types";
 import { useQuery } from "react-query";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
+import api from "../../../services/Api";
 
 export function ModalEditContact({
   isModalActive,

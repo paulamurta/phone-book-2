@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SearchProps } from "./types";
-import { IoMdClose as CloseIcon } from "react-icons/io";
-import { FiSearch as SearchIcon } from "react-icons/fi";
+import { X, MagnifyingGlass } from "@phosphor-icons/react";
+
 import { Container, IconBox } from "./styles";
 
 export function Search({ inputWidth, message, onSearch }: SearchProps) {
@@ -15,7 +15,7 @@ export function Search({ inputWidth, message, onSearch }: SearchProps) {
   return (
     <Container size={inputWidth}>
       <IconBox>
-        <SearchIcon />
+        <MagnifyingGlass />
       </IconBox>
       <input
         type="text"
@@ -30,7 +30,7 @@ export function Search({ inputWidth, message, onSearch }: SearchProps) {
             onSearch("");
           }}
         >
-          <CloseIcon />
+          <X />
         </IconBox>
       ) : (
         ""

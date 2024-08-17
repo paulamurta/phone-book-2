@@ -25,9 +25,9 @@ export const WrapperModal = styled.div`
   gap: 4vh;
   padding: 2vw;
   background-color: ${({ theme }) => theme.colors.background.white};
-  /* max-height: 60%; */
   width: 50%;
-  border-radius: 10px;
+  border-radius: 3vh;
+  border: 1px solid ${({ theme }) => theme.colors.border.main};
   box-shadow: 0px 1px 4px #00000029;
 
   svg {

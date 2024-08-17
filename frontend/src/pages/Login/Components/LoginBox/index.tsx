@@ -20,6 +20,7 @@ export default function LoginBox({ setIsLoginShown }: any) {
     e.preventDefault();
     await login(email, password);
   }
+
   return (
     <Content>
       <motion.div

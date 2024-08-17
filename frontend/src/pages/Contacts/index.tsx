@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Search } from "../../components/Input/Search";
 import { ContainerRow, LogoBox } from "../../styles/global";
-import { Header3, Header1, Body3, Small } from "../../styles/typography";
+import { Header3, Header1, Body3, Small, Body1 } from "../../styles/typography";
 import {
+  AvatarContainer,
   Background,
   Content,
   Header,
@@ -14,7 +15,6 @@ import { motion } from "framer-motion";
 import { BiSolidContact } from "react-icons/bi";
 import { useTheme } from "styled-components";
 import { useQuery } from "react-query";
-import { api } from "../../api/api";
 import { IContact } from "../../interfaces/IContact";
 import { Card } from "../../components/Card";
 import { ModalNewContact } from "./ModalNew";
@@ -23,6 +23,7 @@ import { ModalEditContact } from "./ModalEdit";
 import { ModalDeleteContact } from "./ModalDelete";
 import { SignOut } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/Api";
 
 function Contacts() {
   const { colors: theme } = useTheme();
@@ -48,6 +49,7 @@ function Contacts() {
     },
     {
       onSuccess: (dataOnSuccess) => {
+        console.log("dataOnSuccess: ", dataOnSuccess);
         setContacts(dataOnSuccess?.data);
       },
 
@@ -55,6 +57,33 @@ function Contacts() {
       staleTime: 2000,
     },
   );
+
+  // const { refetch: refetchPendencies } = useQuery(
+  //   ["pendencies", searchParam],
+  //   () => getPendencies(searchParam),
+  //   {
+  //     onSuccess: (dataOnSuccess) => {
+  //       if (dataOnSuccess) {
+  //         const newData = dataOnSuccess?.data.map((item: any) => ({
+  //           id: item.id,
+  //           email: item.email,
+  //           name: item.name,
+  //           last_name: item.last_name,
+  //           image: item.image ? item.image : null,
+  //           profile: {
+  //             identifier: item.user_profile[0].profiles.identifier,
+  //             description: item.user_profile[0].profiles.description,
+  //           },
+  //           institution: item.institution ? item.institution : null,
+  //         }));
+
+  //         setListData(newData);
+  //         setPendencies(newData.length);
+  //       }
+  //     },
+  //     enabled: isChiefResearcher || isManager,
+  //   },
+  // );
 
   useEffect(() => {
     refetch();
@@ -101,6 +130,9 @@ function Contacts() {
               john@snow.com
             </Small>
           </UserInfo>
+          <AvatarContainer>
+            <Body1 $fontColor={theme.typography.darkGray}>J</Body1>
+          </AvatarContainer>
           <SignOutButton onClick={() => navigate("/home")}>
             <SignOut weight={"bold"} />
           </SignOutButton>

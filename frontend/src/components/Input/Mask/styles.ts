@@ -17,7 +17,8 @@ export const StyledInputMask = styled(InputMask)`
   height: ${({ height }) => (height ? height : "5vh")};
   font-size: clamp(0.2rem, 0.17rem + 1.8vh, 3rem);
   font-family: "Inter 400";
-  border-radius: 12px;
+  border-radius: 3vh;
+
   border: 1px solid ${({ theme }) => theme.colors.border.main};
   padding: 0.5vw 1vw;
   transition: color 0.3s ease-in-out;

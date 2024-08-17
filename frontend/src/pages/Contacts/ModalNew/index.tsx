@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import ReactDOM from "react-dom";
-import { api } from "../../../api/api";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import { NewContactModalProps } from "./types";
@@ -12,6 +11,7 @@ import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { MaskInput } from "../../../components/Input/Mask";
 import { WrapperModal } from "./styles";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
+import api from "../../../services/Api";
 
 export function ModalNewContact({
   isModalActive,

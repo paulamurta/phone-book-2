@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 import { ActionButtonProps } from "./types";
 
-export interface IFavorite {
+export type IFavorite = {
   $favorite: boolean;
-}
+};
 
 export const Container = styled.div`
   display: flex;

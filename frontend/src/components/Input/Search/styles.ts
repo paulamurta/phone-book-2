@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IContainer } from "./types";
+import { IContainer } from "../../../styles/types";
 
 export const Container = styled.div<IContainer>`
   width: ${({ $size }) => ($size ? $size : "100%")};

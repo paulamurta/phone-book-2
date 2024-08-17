@@ -141,7 +141,7 @@ export function ModalEditContact({
             label={"Phone Number*"}
             placeholder={"000-000-0000"}
             message={"Phone Number must be exactly a 10-digit number"}
-            onChange={(value) => {
+            onChange={(value: any) => {
               setPhone(value.replace(/-/g, ""));
             }}
           />

@@ -3,7 +3,3 @@ export type SearchProps = {
   onSearch: (value: string) => void;
   message?: string;
 };
-
-export interface IContainer {
-  $size?: string;
-}

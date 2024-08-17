@@ -1,8 +1,8 @@
-export interface IAuthProvider {
+export type IAuthProvider = {
   children: JSX.Element;
-}
+};
 
-export interface IAuthContext {
+export type IAuthContext = {
   name: string | null;
   email: string | null;
   isLogout: boolean;
@@ -13,4 +13,4 @@ export interface IAuthContext {
   logout?: () => void;
   fetchMyData: () => void;
   login: (email: string, password: string) => void;
-}
+};

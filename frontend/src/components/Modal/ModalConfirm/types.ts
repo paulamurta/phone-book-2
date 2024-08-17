@@ -8,5 +8,5 @@ export type ModalProps = {
   title?: string;
   message?: string | ReactNode;
   loadingMessage?: string;
-  isLoading?: boolean;
+  children?: ReactNode;
 };

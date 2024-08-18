@@ -3,6 +3,7 @@ import { AppError } from "../common/app.Error";
 import {
   IContact,
   IContactCreate,
+  IContactSearch,
   IContactUpdate,
 } from "../interfaces/contact";
 import { contactRepository } from "../repository/contact";
@@ -12,7 +13,7 @@ export const createContactService = async (
   ownerId: string
 ): Promise<IContact> => {
   try {
-    const newContact = contactRepository.create(contact, ownerId);
+    const newContact = await contactRepository.create(contact, ownerId);
     return newContact;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -25,20 +26,25 @@ export const createContactService = async (
   }
 };
 
-export const getContactsService = async (): Promise<IContact[]> => {
-  return contactRepository.getAll();
+export const getContactsService = async (
+  ownerId: string,
+  searchParams: IContactSearch
+): Promise<IContact[]> => {
+  return contactRepository.getAll(ownerId, searchParams);
 };
 
 export const getContactsByLastNameService = async (
+  ownerId: string,
   search: string
 ): Promise<IContact[]> => {
-  return contactRepository.findByLastName(search);
+  return contactRepository.findByLastName(ownerId, search);
 };
 
 export const getContactByIdService = async (
-  id: string
+  id: string,
+  ownerId: string
 ): Promise<IContact | undefined> => {
-  const foundContact = contactRepository.findById(id);
+  const foundContact = await contactRepository.findById(id, ownerId);
 
   if (!foundContact) {
     throw new AppError(404, "Contact not found.");
@@ -46,9 +52,9 @@ export const getContactByIdService = async (
   return foundContact;
 };
 
-export const deleteContactService = async (id: string) => {
+export const deleteContactService = async (id: string, ownerId: string) => {
   try {
-    await contactRepository.delete(id);
+    await contactRepository.delete(id, ownerId);
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
       throw new AppError(400, `${err.code}: ${err.message}`);
@@ -59,16 +65,21 @@ export const deleteContactService = async (id: string) => {
 
 export const updateContactService = async (
   id: string,
-  contact: IContactUpdate
+  contact: IContactUpdate,
+  ownerId: string
 ) => {
-  const hasChangedValue = Object.values(contact).some((value) => !!value);
+  const doHaveChanges = Object.values(contact).some((value) => !!value);
 
-  if (hasChangedValue) {
+  if (!doHaveChanges) {
     throw new AppError(422, "At least one field must be filled for update");
   }
 
   try {
-    const updatedContact = contactRepository.patchContact(id, contact);
+    const updatedContact = await contactRepository.patchContact(
+      id,
+      contact,
+      ownerId
+    );
     return updatedContact;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {

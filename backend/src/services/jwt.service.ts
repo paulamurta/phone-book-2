@@ -19,7 +19,7 @@ export class JwtService {
   }
 
   validateToken(token: string) {
-    const payload = jwt.verify(token, APP_CONFIG.jwtIssuer);
+    const payload = jwt.verify(token, APP_CONFIG.jwtKey);
     return payload;
   }
 
@@ -35,7 +35,7 @@ export class JwtService {
     if (!this.supportedTokenTypes.includes(tokenType)) {
       throw new Error(`Unsupported token type "${tokenType}"`);
     }
-    return tokenValue;
+    return tokenValue?.trim();
   }
 
   validateTokenFromHeader(rawHeader: string) {

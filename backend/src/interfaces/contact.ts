@@ -35,3 +35,9 @@ export interface IContactUpdate {
   favorite?: boolean;
   groupId?: string;
 }
+
+export interface IContactSearch {
+  search?: string;
+  favorite?: boolean;
+  groupId?: string;
+}

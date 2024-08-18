@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 
+import { AppError, handleError } from "../common/app.Error";
+import { JwtTokenPayload } from "../common/app.type";
+import { contactSearchSerializer } from "../serializers/contact.serializer";
 import {
   createContactService,
   deleteContactService,
   getContactByIdService,
-  getContactsByLastNameService,
   getContactsService,
   updateContactService,
 } from "../services/contact.service";
-import { AppError, handleError } from "../common/app.Error";
 import { jwtService } from "../services/jwt.service";
-import { JwtTokenPayload } from "../common/app.type";
 
 export const createContactController = async (req: Request, res: Response) => {
   try {
@@ -29,7 +29,20 @@ export const createContactController = async (req: Request, res: Response) => {
 
 export const getContactsController = async (req: Request, res: Response) => {
   try {
-    const contacts = await getContactsService();
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+
+    const { search, favorite, groupId } = req.query;
+
+    const searchParams = await contactSearchSerializer.validate({
+      search,
+      groupId,
+      favorite: favorite ? favorite === "true" : undefined,
+    });
+
+    const contacts = await getContactsService(tokenPayload.sub, searchParams);
     return res.json(contacts);
   } catch (err) {
     if (err instanceof AppError) {
@@ -38,24 +51,15 @@ export const getContactsController = async (req: Request, res: Response) => {
   }
 };
 
-export const getContactsByLastNameController = async (
-  req: Request,
-  res: Response
-) => {
-  const { search } = req.params;
-  try {
-    const contacts = await getContactsByLastNameService(search);
-    return res.json(contacts);
-  } catch (err) {
-    if (err instanceof AppError) {
-      handleError(err, res);
-    }
-  }
-};
 export const getContactByIdController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const contact = await getContactByIdService(id);
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+
+    const contact = await getContactByIdService(id, tokenPayload.sub);
     return res.json(contact);
   } catch (err) {
     if (err instanceof AppError) {
@@ -67,7 +71,12 @@ export const getContactByIdController = async (req: Request, res: Response) => {
 export const deleteContactsController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await deleteContactService(id);
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+
+    await deleteContactService(id, tokenPayload.sub);
     return res.status(200).json({ message: "Contact successfully deleted" });
   } catch (err) {
     if (err instanceof AppError) {
@@ -79,7 +88,12 @@ export const deleteContactsController = async (req: Request, res: Response) => {
 export const updateContactController = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await updateContactService(id, req.body);
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+
+    await updateContactService(id, req.body, tokenPayload.sub);
     return res.status(204).send({ message: "Contact successfully updated" });
   } catch (err) {
     if (err instanceof AppError) {

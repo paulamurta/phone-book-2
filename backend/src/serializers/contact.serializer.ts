@@ -1,6 +1,10 @@
 import * as yup from "yup";
 
-import { IContactCreate, IContactUpdate } from "../interfaces/contact";
+import {
+  IContactCreate,
+  IContactSearch,
+  IContactUpdate,
+} from "../interfaces/contact";
 
 const phoneRegExp = /^[0-9]{10,10}$/;
 
@@ -24,4 +28,10 @@ export const updateContactSerializer = yup.object<IContactUpdate>().shape({
   email: yup.string().email().optional(),
   favorite: yup.boolean().optional(),
   birthday: yup.date().optional(),
+});
+
+export const contactSearchSerializer = yup.object<IContactSearch>().shape({
+  search: yup.string().optional(),
+  favorite: yup.boolean().optional(),
+  groupId: yup.string().uuid().optional(),
 });

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 interface ITypography {
   $fontColor?: string;
   $bold?: boolean;
+  $align?: string;
 }
 
 export const Header1 = styled.h1<ITypography>`
@@ -32,10 +33,11 @@ export const Header3 = styled.h2<ITypography>`
 `;
 
 export const Header4 = styled.h2<ITypography>`
-  ${({ theme, $fontColor }) => css`
+  ${({ theme, $fontColor, $align }) => css`
     font-size: clamp(0.6rem, 0.4rem + 2.1vh, 2.8rem);
     font-family: "Inter 600", sans-serif;
     color: ${$fontColor ? $fontColor : theme.colors.typography.body};
+    text-align: ${$align ? $align : "center"};
   `}
 `;
 
@@ -48,9 +50,11 @@ export const Body1 = styled.p<ITypography>`
 `;
 
 export const Body2 = styled.p<ITypography>`
-  ${({ theme, $fontColor }) => css`
+  ${({ theme, $fontColor, $bold }) => css`
     font-size: clamp(0.35rem, 0.3rem + 1.8vh, 2rem);
-    font-family: "Inter 400", sans-serif;
+    font-family: ${$bold
+      ? `"Inter 600", sans-serif`
+      : `"Inter 400", sans-serif`};
     color: ${$fontColor ? $fontColor : theme.colors.typography.body};
   `}
 `;

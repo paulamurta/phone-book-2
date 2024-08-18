@@ -30,11 +30,13 @@ import {
 } from "../../services/contacts.service";
 import { Filter } from "../../components/Filter";
 import { ISelectCurrentValue } from "../../components/Select/types";
+import { ManageGroups } from "../Groups";
 
 function Contacts() {
   const { colors: theme } = useTheme();
   const [searchParam, setSearchParam] = useState("");
   const [contacts, setContacts] = useState<IContact[]>([]);
+  const [isManageGroupsOpen, setIsManageGroupsOpen] = useState(false);
   const [isNewContactOpen, setIsNewContactOpen] = useState(false);
   const [isEditContactOpen, setIsEditContactOpen] = useState(false);
   const [isDeleteContactOpen, setIsDeleteContactOpen] = useState(false);
@@ -48,7 +50,7 @@ function Contacts() {
   const navigate = useNavigate();
 
   const { refetch } = useQuery(
-    ["contacts", searchParam],
+    ["contacts", searchParam, group],
     () => {
       if (searchParam.length === 0) {
         return getAllContacts();
@@ -76,6 +78,13 @@ function Contacts() {
 
   return (
     <>
+      <ManageGroups
+        isManageGroupsOpen={isManageGroupsOpen}
+        closeManageGroups={() => {
+          refetch();
+          setIsManageGroupsOpen(false);
+        }}
+      />
       <NewContact
         isNewContactOpen={isNewContactOpen}
         closeNewContact={() => {
@@ -133,27 +142,36 @@ function Contacts() {
 
             <ContainerRow>
               <Header3>Contacts</Header3>
+
               <ButtonConfirm
                 onClick={() => setIsNewContactOpen(true)}
-                width={"25%"}
+                width={"14vw"}
                 label={"+ Add Contact"}
               />
             </ContainerRow>
-            <ContainerRow $position="left">
-              <Tabs favorites={favorites} setFavorites={setFavorites} />
-              <Filter
-                setGroup={setGroup}
-                width="17vw"
-                refetch={refetch}
-                isFilterOpen={isFilterOpen}
-                anchorEl={anchorEl}
-                handleOpenFilter={handleOpenFilter}
-                handleCloseFilter={handleCloseFilter}
+            <ContainerRow>
+              <ContainerRow $width={"auto"}>
+                <Tabs favorites={favorites} setFavorites={setFavorites} />
+                <Filter
+                  setGroup={setGroup}
+                  width="17vw"
+                  refetch={refetch}
+                  isFilterOpen={isFilterOpen}
+                  anchorEl={anchorEl}
+                  handleOpenFilter={handleOpenFilter}
+                  handleCloseFilter={handleCloseFilter}
+                />
+              </ContainerRow>
+
+              <ButtonConfirm
+                onClick={() => setIsManageGroupsOpen(true)}
+                width={"14vw"}
+                label={"Manage groups"}
               />
             </ContainerRow>
 
             <Search
-              message={"Search for contact by last name..."}
+              message={"Search for contact by name/last name..."}
               onSearch={(value) => {
                 setSearchParam(value);
               }}

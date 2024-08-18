@@ -6,6 +6,7 @@ import Inter600 from "../fonts/inter-v13-latin-600.woff2";
 import Inter800 from "../fonts/inter-v13-latin-800.woff2";
 import styled from "styled-components";
 import { IContainer } from "./types";
+import { ActionButtonProps } from "../components/Card/types";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -37,6 +38,7 @@ font-family: "Inter 800";
     font-family: "Inter 400", sans-serif;
     scroll-behavior: smooth;
     font-weight: normal;
+
   }
 
   body {
@@ -46,6 +48,8 @@ font-family: "Inter 800";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: auto;
+    overflow-x: hidden;
+
   }
 
   ::-webkit-scrollbar {
@@ -95,6 +99,7 @@ export const ContainerRow = styled.div<IContainer>`
   align-items: center;
   width: 100%;
   gap: 1vw;
+  width: ${({ $width }) => ($width ? $width : "100%")};
 
   ${(props) =>
     props.$position === "left"
@@ -175,4 +180,40 @@ export const ButtonsBox = styled.div`
   width: 100%;
   justify-content: center;
   gap: 1rem;
+`;
+
+export const ActionButon = styled.button<ActionButtonProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 1vh;
+  color: ${({ theme }) => theme.colors.typography.white};
+  font-size: clamp(0.6rem, 0.5rem + 2.3vh, 1.8rem);
+  ${(props) =>
+    props.action === "delete"
+      ? css`
+          background-color: ${({ theme }) => theme.colors.danger.main};
+        `
+      : css`
+          background-color: ${({ theme }) => theme.colors.success.main};
+        `}
+
+  &:hover {
+    transition: background-color 0.5s ease-in-out;
+    ${(props) =>
+      props.action === "delete"
+        ? css`
+            background-color: ${({ theme }) => theme.colors.danger.light};
+          `
+        : css`
+            background-color: ${({ theme }) => theme.colors.success.light};
+          `}
+  }
+
+  svg {
+    height: 50%;
+    width: 50%;
+  }
 `;

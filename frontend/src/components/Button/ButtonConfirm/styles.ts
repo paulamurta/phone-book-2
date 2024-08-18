@@ -10,6 +10,7 @@ export const Button = styled.button<ButtonConfirmProps>`
   font-size: clamp(0.3rem, 0.4rem + 1.5vh, 1.8rem);
   white-space: nowrap;
   font-family: "Inter 600";
+  padding: 0;
   cursor: pointer;
 
   &:hover {

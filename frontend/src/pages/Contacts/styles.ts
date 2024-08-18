@@ -16,7 +16,7 @@ export const Header = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   height: 7vh;
   gap: 2vh;
   padding-right: 1vw;

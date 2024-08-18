@@ -1,8 +1,11 @@
 import { formatPhoneNumber } from "../../common/utils/format/formatPhoneNumber";
-import { ContainerColumn, ContainerRow } from "../../styles/global";
-import { Body1, Body4 } from "../../styles/typography";
 import {
   ActionButon,
+  ContainerColumn,
+  ContainerRow,
+} from "../../styles/global";
+import { Body1, Body4 } from "../../styles/typography";
+import {
   Container,
   FavoriteButton,
   NameAndGroupContainer,
@@ -15,7 +18,6 @@ import {
   Phone,
   Heart,
   EnvelopeSimple,
-  Cake,
   Gift,
 } from "@phosphor-icons/react";
 

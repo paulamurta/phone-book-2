@@ -79,7 +79,7 @@ export function NewContact({
         handleCancel={handleCancelModal}
         handleClose={handleCloseModal}
         title="Cancel Register Contact?"
-        message="You are leaving Register Contact. Would you like to continue?"
+        message="You are leaving Register Contact."
       />
       <WrapperModal>
         <Header4>Register Contact</Header4>

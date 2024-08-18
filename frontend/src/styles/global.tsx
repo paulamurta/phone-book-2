@@ -181,5 +181,5 @@ export const SmallButtonsBox = styled.div`
   align-items: flex-start;
   width: 100%;
   justify-content: center;
-  gap: 1rem;
+  gap: 1vw;
 `;

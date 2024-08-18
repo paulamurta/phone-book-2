@@ -23,19 +23,13 @@ export const Button = styled.button<IButton>`
 `;
 
 export const WrapperConfirm = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.background.white};
-  border: 1px solid ${({ theme }) => theme.colors.border.main};
-  border-radius: 3vh;
-  min-height: 20%;
-  max-width: 30%;
-  box-shadow: 0px 3px 6px #00000029;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  padding: 2vw;
-  gap: 2vh;
+  height: 100%;
+  width: 100%;
+  gap: 4vh;
 `;
 
 export const WrapperText = styled.div`
@@ -43,7 +37,7 @@ export const WrapperText = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 2vh;
+  gap: 0.5vh;
   text-align: center;
 `;
 

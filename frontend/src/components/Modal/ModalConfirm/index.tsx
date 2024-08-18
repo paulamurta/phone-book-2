@@ -1,9 +1,13 @@
 import { ModalProps } from "./types";
 import { DefaultModal } from "../DefaultModal";
 import { Body3, Header4 } from "../../../styles/typography";
-import { Button, WrapperConfirm, WrapperText } from "./styles";
-import { SmallButtonsBox } from "../../../styles/global";
 import { useTheme } from "styled-components";
+import {
+  SmallButton,
+  SmallButtonsBox,
+  WrapperText,
+  WrapperConfirm,
+} from "../../../styles/common/Modal/styles";
 
 export function ModalConfirm({
   isModalActive,
@@ -25,20 +29,20 @@ export function ModalConfirm({
         </WrapperText>
 
         <SmallButtonsBox>
-          <Button
+          <SmallButton
             $fontColor={theme.danger.main}
             $hovercolor={theme.background.mediumGray}
             onClick={() => (handleSubmit ? handleSubmit() : handleClose())}
           >
             Yes
-          </Button>
-          <Button
+          </SmallButton>
+          <SmallButton
             $fontColor={theme.primary.main}
             $hovercolor={theme.background.mediumGray}
             onClick={handleCancel}
           >
             No
-          </Button>
+          </SmallButton>
         </SmallButtonsBox>
       </WrapperConfirm>
     </DefaultModal>

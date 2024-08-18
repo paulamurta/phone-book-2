@@ -1,28 +1,26 @@
 import toast from "react-hot-toast";
-import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import { NewContactModalProps } from "./types";
-import { ButtonsBox, FormModal, OverlayModal } from "../../../styles/global";
+import { ButtonsBox, FormModal } from "../../../styles/global";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
 import { Header4 } from "../../../styles/typography";
 import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
 import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { MaskInput } from "../../../components/Input/Mask";
-import { WrapperModal } from "./styles";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
 import api from "../../../services/Api";
+import { DefaultModal } from "../../../components/Modal/DefaultModal";
+import { WrapperModal } from "../../../styles/common/Modal/styles";
 
 export function NewContact({
-  isModalActive,
-  closeModal,
+  isNewContactOpen,
+  closeNewContact,
 }: NewContactModalProps) {
-  const modalRoot = document.getElementById("modal") as HTMLElement;
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-
   const navigate = useNavigate();
 
   const isFormValid = firstName && lastName && phone.length === 10;
@@ -35,7 +33,7 @@ export function NewContact({
     setFirstName("");
     setLastName("");
     setPhone("");
-    closeModal();
+    closeNewContact();
     navigate("/contacts");
     setIsModalConfirmOpen(false);
   }
@@ -68,12 +66,8 @@ export function NewContact({
     } catch (error) {}
   }
 
-  if (!isModalActive) {
-    return null;
-  }
-
-  return ReactDOM.createPortal(
-    <OverlayModal>
+  return (
+    <>
       <ModalConfirm
         isModalActive={isModalConfirmOpen}
         handleCancel={handleCancelModal}
@@ -81,56 +75,61 @@ export function NewContact({
         title="Cancel Register Contact?"
         message="You are leaving Register Contact."
       />
-      <WrapperModal>
-        <Header4>Register Contact</Header4>
-        <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
-          <DefaultInput
-            key="first-name"
-            label={"First Name*"}
-            value={firstName}
-            placeholder={"Barbara"}
-            onChange={(value) => {
-              setFirstName(value);
-            }}
-          />
-          <DefaultInput
-            key="last-name"
-            label={"Last Name*"}
-            placeholder={"Smith"}
-            value={lastName}
-            onChange={(value) => {
-              setLastName(value);
-            }}
-          />
-          <MaskInput
-            mask="999-999-9999"
-            key="phone"
-            value={phone}
-            label={"Phone Number*"}
-            placeholder={"000-000-0000"}
-            message={"Phone Number must be exactly a 10-digit number"}
-            onChange={(value) => {
-              setPhone(value.replace(/-/g, ""));
-            }}
-          />
+      <DefaultModal
+        isOpen={isNewContactOpen}
+        onClose={closeNewContact}
+        width={"50vw"}
+      >
+        <WrapperModal>
+          <Header4>Register Contact</Header4>
+          <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
+            <DefaultInput
+              key="first-name"
+              label={"First Name*"}
+              value={firstName}
+              placeholder={"Barbara"}
+              onChange={(value) => {
+                setFirstName(value);
+              }}
+            />
+            <DefaultInput
+              key="last-name"
+              label={"Last Name*"}
+              placeholder={"Smith"}
+              value={lastName}
+              onChange={(value) => {
+                setLastName(value);
+              }}
+            />
+            <MaskInput
+              mask="999-999-9999"
+              key="phone"
+              value={phone}
+              label={"Phone Number*"}
+              placeholder={"000-000-0000"}
+              message={"Phone Number must be exactly a 10-digit number"}
+              onChange={(value) => {
+                setPhone(value.replace(/-/g, ""));
+              }}
+            />
 
-          <ButtonsBox>
-            <ButtonConfirm
-              label={"Save"}
-              type="submit"
-              disabled={!isFormValid}
-              width="15vw"
-            />
-            <ButtonCancel
-              label={"Cancel"}
-              type="button"
-              width="15vw"
-              onClick={() => setIsModalConfirmOpen(true)}
-            />
-          </ButtonsBox>
-        </FormModal>
-      </WrapperModal>
-    </OverlayModal>,
-    modalRoot,
+            <ButtonsBox>
+              <ButtonConfirm
+                label={"Save"}
+                type="submit"
+                disabled={!isFormValid}
+                width="15vw"
+              />
+              <ButtonCancel
+                label={"Cancel"}
+                type="button"
+                width="15vw"
+                onClick={() => setIsModalConfirmOpen(true)}
+              />
+            </ButtonsBox>
+          </FormModal>
+        </WrapperModal>
+      </DefaultModal>
+    </>
   );
 }

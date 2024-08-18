@@ -1,4 +1,4 @@
 export type NewContactModalProps = {
-  isModalActive?: boolean;
-  closeModal: () => void;
+  isNewContactOpen: boolean;
+  closeNewContact: () => void;
 };

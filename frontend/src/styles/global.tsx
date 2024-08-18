@@ -175,11 +175,3 @@ export const ButtonsBox = styled.div`
   justify-content: center;
   gap: 1rem;
 `;
-
-export const SmallButtonsBox = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  justify-content: center;
-  gap: 1vw;
-`;

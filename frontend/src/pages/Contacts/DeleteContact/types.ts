@@ -1,7 +1,7 @@
 export type ModalDeleteProps = {
-  isModalActive?: boolean;
-  closeModal: () => void;
-  keyId: string;
+  isDeleteContactOpen: boolean;
+  closeDeleteContact: () => void;
+  keyId?: string;
   firstName: string;
   lastName: string;
 };

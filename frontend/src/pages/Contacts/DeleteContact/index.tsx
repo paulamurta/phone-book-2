@@ -1,27 +1,29 @@
 import toast from "react-hot-toast";
-import ReactDOM from "react-dom";
 import { ModalDeleteProps } from "./types";
 import { Body3, Header4 } from "../../../styles/typography";
-import { Button, WrapperDelete, WrapperText } from "./styles";
 import { useTheme } from "styled-components";
-import { OverlayModal, SmallButtonsBox } from "../../../styles/global";
 import { useNavigate } from "react-router-dom";
 import api from "../../../services/Api";
+import { DefaultModal } from "../../../components/Modal/DefaultModal";
+import {
+  SmallButton,
+  SmallButtonsBox,
+  WrapperText,
+} from "../../../styles/common/Modal/styles";
 
 export function DeleteContact({
-  isModalActive,
-  closeModal,
+  isDeleteContactOpen,
+  closeDeleteContact,
   keyId,
   firstName,
   lastName,
 }: ModalDeleteProps) {
-  const modalRoot = document.getElementById("modal") as HTMLElement;
   const { colors: theme } = useTheme();
 
   const navigate = useNavigate();
 
   function handleCloseModal() {
-    closeModal();
+    closeDeleteContact();
     navigate("/contacts");
   }
 
@@ -45,13 +47,13 @@ export function DeleteContact({
     } catch (error) {}
   }
 
-  if (!isModalActive) {
-    return null;
-  }
-
-  return ReactDOM.createPortal(
-    <OverlayModal>
-      <WrapperDelete>
+  return (
+    <DefaultModal
+      isOpen={isDeleteContactOpen}
+      onClose={closeDeleteContact}
+      width={"30vw"}
+    >
+      <>
         <WrapperText>
           <Header4>Are you sure you want to delete this contact?</Header4>
           <Body3>
@@ -59,23 +61,22 @@ export function DeleteContact({
           </Body3>
         </WrapperText>
         <SmallButtonsBox>
-          <Button
+          <SmallButton
             $fontColor={theme.danger.main}
-            hovercolor={theme.background.mediumGray}
+            $hovercolor={theme.background.mediumGray}
             onClick={handleSubmit}
           >
             Yes
-          </Button>
-          <Button
+          </SmallButton>
+          <SmallButton
             $fontColor={theme.primary.main}
-            hovercolor={theme.background.mediumGray}
+            $hovercolor={theme.background.mediumGray}
             onClick={handleCloseModal}
           >
             No
-          </Button>
+          </SmallButton>
         </SmallButtonsBox>
-      </WrapperDelete>
-    </OverlayModal>,
-    modalRoot,
+      </>
+    </DefaultModal>
   );
 }

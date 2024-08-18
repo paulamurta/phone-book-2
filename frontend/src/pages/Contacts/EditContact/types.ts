@@ -1,5 +1,5 @@
 export type EditContactModalProps = {
-  isModalActive?: boolean;
-  closeModal: () => void;
-  keyId: string;
+  isEditContactOpen: boolean;
+  keyId?: string;
+  closeEditContact: () => void;
 };

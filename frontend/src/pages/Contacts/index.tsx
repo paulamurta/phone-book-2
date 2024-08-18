@@ -30,9 +30,9 @@ function Contacts() {
   const { colors: theme } = useTheme();
   const [searchParam, setSearchParam] = useState("");
   const [contacts, setContacts] = useState<IContact[]>([]);
-  const [modalNewContact, setModalNewContact] = useState(false);
-  const [modalEditContact, setModalEditContact] = useState(false);
-  const [modalDeleteContact, setModalDeleteContact] = useState(false);
+  const [isNewContactOpen, setIsNewContactOpen] = useState(false);
+  const [isEditContactOpen, setIsEditContactOpen] = useState(false);
+  const [isDeleteContactOpen, setIsDeleteContactOpen] = useState(false);
   const [id, setId] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -62,28 +62,28 @@ function Contacts() {
   return (
     <>
       <NewContact
-        isModalActive={modalNewContact}
-        closeModal={() => {
+        isNewContactOpen={isNewContactOpen}
+        closeNewContact={() => {
           refetch();
-          setModalNewContact(false);
+          setIsNewContactOpen(false);
         }}
       />
       <EditContact
         keyId={id}
-        isModalActive={modalEditContact}
-        closeModal={() => {
+        isEditContactOpen={isEditContactOpen}
+        closeEditContact={() => {
           refetch();
-          setModalEditContact(false);
+          setIsEditContactOpen(false);
         }}
       />
       <DeleteContact
+        keyId={id}
+        isDeleteContactOpen={isDeleteContactOpen}
         firstName={firstName}
         lastName={lastName}
-        keyId={id}
-        isModalActive={modalDeleteContact}
-        closeModal={() => {
+        closeDeleteContact={() => {
           refetch();
-          setModalDeleteContact(false);
+          setIsDeleteContactOpen(false);
         }}
       />
 
@@ -119,7 +119,7 @@ function Contacts() {
             <ContainerRow>
               <Header3>Contacts</Header3>
               <ButtonConfirm
-                onClick={() => setModalNewContact(true)}
+                onClick={() => setIsNewContactOpen(true)}
                 width={"25%"}
                 label={"+ Add Contact"}
               />
@@ -140,10 +140,10 @@ function Contacts() {
                   firstName={contact.firstName}
                   lastName={contact.lastName}
                   phone={contact.phone}
-                  setModalEditContact={setModalEditContact}
-                  modalEditContact={modalEditContact}
-                  setModalDeleteContact={setModalDeleteContact}
-                  modalDeleteContact={modalDeleteContact}
+                  setModalEditContact={setIsEditContactOpen}
+                  modalEditContact={isEditContactOpen}
+                  setModalDeleteContact={setIsDeleteContactOpen}
+                  modalDeleteContact={isDeleteContactOpen}
                   setId={setId}
                   setFirstName={setFirstName}
                   setLastName={setLastName}

@@ -1,5 +1,6 @@
-import { Wrapper, TabBtn, Divider } from "./styles";
+import { Wrapper, TabBtn } from "./styles";
 import { TabsProps } from "./types";
+import { Heart } from "@phosphor-icons/react";
 
 export function Tabs({ favorites, setFavorites }: TabsProps) {
   return (
@@ -11,13 +12,13 @@ export function Tabs({ favorites, setFavorites }: TabsProps) {
       >
         All
       </TabBtn>
-      <Divider />
       <TabBtn
         $position={"right"}
         $selected={favorites}
         onClick={() => setFavorites(true)}
       >
         Favorites
+        <Heart weight="fill" />
       </TabBtn>
     </Wrapper>
   );

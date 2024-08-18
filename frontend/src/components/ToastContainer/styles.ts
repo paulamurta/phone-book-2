@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 
 export const ContainerBox = styled.div`
-  position: absolute;
+  position: fixed;
   right: 0;
   z-index: 99999;
 `;

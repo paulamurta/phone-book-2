@@ -1,25 +1,32 @@
-// import { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { IContactCreate, IContactEdit } from "../interfaces/IContact";
+import api from "./Api";
 
-// export async function getAllCultivations(
-//   page: number,
-//   property_id?: number,
-//   lot_id?: number,
-//   plant_id?: number,
-//   start?: Date | null,
-//   end?: Date | null,
-// ): Promise<AxiosResponse<>> {
-//   const params = new URLSearchParams();
+export async function getAllContacts(): Promise<AxiosResponse> {
+  return await api.get("/contacts");
+}
 
-//   params.append("page", page.toString());
-//   params.append("offset", "8");
-//   if (start && end) {
-//     params.append("start", start.toISOString().split("T")[0].toString());
-//     params.append("end", end.toISOString().split("T")[0].toString());
-//   }
-//   if (property_id) params.append("property_id", property_id.toString());
-//   if (lot_id) params.append("lot_id", lot_id.toString());
-//   if (plant_id) params.append("plant_id", plant_id.toString());
-//   params.append("Accept-Language", "pt");
+export async function getAllContactsSearch(
+  searchParam: string,
+): Promise<AxiosResponse> {
+  return await api.get(`/contacts/lastname/${searchParam}`);
+}
 
-//   return await api.get("/cultivation", { params });
-// }
+export async function createContact(
+  payload: IContactCreate,
+): Promise<AxiosResponse> {
+  return await api.post(`/contacts`, payload);
+}
+
+export async function getContactById(
+  id: string | undefined,
+): Promise<AxiosResponse> {
+  return await api.get(`/contacts/${id}`);
+}
+
+export async function editContact(
+  id: string | undefined,
+  payload: IContactEdit,
+): Promise<AxiosResponse> {
+  return await api.put(`/contacts/${id}`, payload);
+}

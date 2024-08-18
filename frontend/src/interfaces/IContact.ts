@@ -10,3 +10,9 @@ export interface IContactCreate {
   lastName: string;
   phone: string;
 }
+
+export interface IContactEdit {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+}

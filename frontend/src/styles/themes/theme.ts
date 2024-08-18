@@ -29,6 +29,31 @@ export const theme = {
       },
     },
 
+    input: {
+      text: "#3C3C3B",
+      placeholder: "#AFAFAF",
+      black: "#141414",
+      selectedBg: "#D6E2FE",
+      unSelectedBg: "#ffffff",
+      hover: "#e1e1e1",
+      disabled: "#d6d6d6",
+      border: "#b6b6b6",
+    },
+
+    calendar: {
+      month: "#000000",
+      weekDays: "#AFAFAF",
+      border: "#00582A",
+      popperBg: "#ffffff",
+      inputBg: "#ffffff",
+      inputHover: "#E4F4EA",
+      daysHover: "#e9e9e9",
+      daysSelected: "#169A55",
+      daySelectedOld: "#aacaba",
+      daysSelectedText: "#ffffff",
+      disabled: "#AFAFAF",
+    },
+
     login: {
       boxBg: "#ffffff",
     },

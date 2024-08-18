@@ -20,11 +20,16 @@ import { Card } from "../../components/Card";
 import { ButtonConfirm } from "../../components/Button/ButtonConfirm";
 import { SignOut } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/Api";
 import { Tabs } from "../../components/Tabs";
 import { NewContact } from "./NewContact";
 import { EditContact } from "./EditContact";
 import { DeleteContact } from "./DeleteContact";
+import {
+  getAllContacts,
+  getAllContactsSearch,
+} from "../../services/contacts.service";
+import { Filter } from "../../components/Filter";
+import { ISelectCurrentValue } from "../../components/Select/types";
 
 function Contacts() {
   const { colors: theme } = useTheme();
@@ -37,27 +42,37 @@ function Contacts() {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [favorites, setFavorites] = useState<boolean>(false);
+  const [group, setGroup] = useState<ISelectCurrentValue | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
 
   const { refetch } = useQuery(
     ["contacts", searchParam],
     () => {
       if (searchParam.length === 0) {
-        return api.get("/contacts");
+        return getAllContacts();
       }
       if (searchParam.length > 0) {
-        return api.get(`/contacts/lastname/${searchParam}`);
+        return getAllContactsSearch(searchParam);
       }
     },
     {
       onSuccess: (dataOnSuccess) => {
         setContacts(dataOnSuccess?.data);
       },
-
-      keepPreviousData: true,
-      staleTime: 2000,
     },
   );
+
+  const handleOpenFilter = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setIsFilterOpen(true);
+  };
+
+  const handleCloseFilter = () => {
+    setAnchorEl(null);
+    setIsFilterOpen(false);
+  };
 
   return (
     <>
@@ -124,8 +139,19 @@ function Contacts() {
                 label={"+ Add Contact"}
               />
             </ContainerRow>
+            <ContainerRow $position="left">
+              <Tabs favorites={favorites} setFavorites={setFavorites} />
+              <Filter
+                setGroup={setGroup}
+                width="17vw"
+                refetch={refetch}
+                isFilterOpen={isFilterOpen}
+                anchorEl={anchorEl}
+                handleOpenFilter={handleOpenFilter}
+                handleCloseFilter={handleCloseFilter}
+              />
+            </ContainerRow>
 
-            <Tabs favorites={favorites} setFavorites={setFavorites} />
             <Search
               message={"Search for contact by last name..."}
               onSearch={(value) => {

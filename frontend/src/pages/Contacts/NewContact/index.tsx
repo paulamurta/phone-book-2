@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import { NewContactModalProps } from "./types";
 import { ButtonsBox, FormModal } from "../../../styles/global";
@@ -9,9 +8,9 @@ import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
 import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { MaskInput } from "../../../components/Input/Mask";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
-import api from "../../../services/Api";
 import { DefaultModal } from "../../../components/Modal/DefaultModal";
 import { WrapperModal } from "../../../styles/common/Modal/styles";
+import { createContact } from "../../../services/contacts.service";
 
 export function NewContact({
   isNewContactOpen,
@@ -21,7 +20,6 @@ export function NewContact({
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const navigate = useNavigate();
 
   const isFormValid = firstName && lastName && phone.length === 10;
 
@@ -34,20 +32,21 @@ export function NewContact({
     setLastName("");
     setPhone("");
     closeNewContact();
-    navigate("/contacts");
     setIsModalConfirmOpen(false);
   }
 
+  function onTryToClose() {
+    setIsModalConfirmOpen(true);
+  }
+
   async function onSaveFields() {
-    const body = {
+    const payload = {
       firstName: firstName,
       lastName: lastName,
       phone: phone,
     };
 
-    await api
-      .post(`/contacts`, body)
-
+    await createContact(payload)
       .then(async () => {
         toast.success("User created successfully!");
       })
@@ -56,20 +55,17 @@ export function NewContact({
       });
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    try {
-      onSaveFields();
-      setTimeout(() => {
-        handleCloseModal();
-      }, 2000);
-    } catch (error) {}
+    await onSaveFields();
+    handleCloseModal();
   }
 
   return (
     <>
       <ModalConfirm
         isModalActive={isModalConfirmOpen}
+        setIsModalActive={setIsModalConfirmOpen}
         handleCancel={handleCancelModal}
         handleClose={handleCloseModal}
         title="Cancel Register Contact?"
@@ -77,7 +73,7 @@ export function NewContact({
       />
       <DefaultModal
         isOpen={isNewContactOpen}
-        onClose={closeNewContact}
+        onClose={onTryToClose}
         width={"50vw"}
       >
         <WrapperModal>

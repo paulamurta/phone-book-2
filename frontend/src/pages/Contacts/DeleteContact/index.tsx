@@ -2,7 +2,6 @@ import toast from "react-hot-toast";
 import { ModalDeleteProps } from "./types";
 import { Body3, Header4 } from "../../../styles/typography";
 import { useTheme } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import api from "../../../services/Api";
 import { DefaultModal } from "../../../components/Modal/DefaultModal";
 import {
@@ -10,6 +9,7 @@ import {
   SmallButtonsBox,
   WrapperText,
 } from "../../../styles/common/Modal/styles";
+import { FormEvent } from "react";
 
 export function DeleteContact({
   isDeleteContactOpen,
@@ -19,13 +19,6 @@ export function DeleteContact({
   lastName,
 }: ModalDeleteProps) {
   const { colors: theme } = useTheme();
-
-  const navigate = useNavigate();
-
-  function handleCloseModal() {
-    closeDeleteContact();
-    navigate("/contacts");
-  }
 
   async function onSaveFields() {
     await api
@@ -38,13 +31,10 @@ export function DeleteContact({
       });
   }
 
-  async function handleSubmit() {
-    try {
-      onSaveFields();
-      setTimeout(() => {
-        handleCloseModal();
-      }, 2000);
-    } catch (error) {}
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    await onSaveFields();
+    closeDeleteContact();
   }
 
   return (
@@ -64,14 +54,14 @@ export function DeleteContact({
           <SmallButton
             $fontColor={theme.danger.main}
             $hovercolor={theme.background.mediumGray}
-            onClick={handleSubmit}
+            onClick={(e) => handleSubmit(e)}
           >
             Yes
           </SmallButton>
           <SmallButton
             $fontColor={theme.primary.main}
             $hovercolor={theme.background.mediumGray}
-            onClick={handleCloseModal}
+            onClick={closeDeleteContact}
           >
             No
           </SmallButton>

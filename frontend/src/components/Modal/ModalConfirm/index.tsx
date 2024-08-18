@@ -11,6 +11,7 @@ import {
 
 export function ModalConfirm({
   isModalActive,
+  setIsModalActive,
   handleCancel,
   handleClose,
   handleSubmit,
@@ -19,8 +20,12 @@ export function ModalConfirm({
 }: ModalProps) {
   const { colors: theme } = useTheme();
 
+  function onTryToClose() {
+    setIsModalActive(false);
+  }
+
   return (
-    <DefaultModal isOpen={isModalActive} onClose={handleClose} width={"25vw"}>
+    <DefaultModal isOpen={isModalActive} onClose={onTryToClose} width={"25vw"}>
       <WrapperConfirm>
         {title && <Header4>{title}</Header4>}
         <WrapperText>

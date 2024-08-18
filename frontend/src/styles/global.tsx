@@ -95,6 +95,7 @@ export const ContainerRow = styled.div<IContainer>`
   align-items: center;
   width: 100%;
   gap: 1vw;
+
   ${(props) =>
     props.$position === "left"
       ? css`

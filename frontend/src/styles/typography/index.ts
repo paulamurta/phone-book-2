@@ -41,7 +41,7 @@ export const Header4 = styled.h2<ITypography>`
 
 export const Body1 = styled.p<ITypography>`
   ${({ theme, $fontColor }) => css`
-    font-size: clamp(0.5rem, 0.4rem + 2.2vh, 2.8rem);
+    font-size: clamp(0.35rem, 0.3rem + 1.9vh, 2.2rem);
     font-family: "Inter 600", sans-serif;
     color: ${$fontColor ? $fontColor : theme.colors.typography.body};
   `}
@@ -60,6 +60,17 @@ export const Body3 = styled.p<ITypography>`
     font-size: clamp(0.3rem, 0.25rem + 1.5vh, 1.7rem);
     font-family: "Inter 400", sans-serif;
     color: ${$fontColor ? $fontColor : theme.colors.typography.body};
+  `}
+`;
+
+export const Body4 = styled.p<ITypography>`
+  ${({ theme, $fontColor, $bold }) => css`
+    font-size: clamp(0.3rem, 0.3rem + 1.5vh, 1.8rem);
+    font-family: ${$bold
+      ? `"Inter 600", sans-serif`
+      : `"Inter 400", sans-serif`};
+    color: ${$fontColor ? $fontColor : theme.colors.typography.body};
+    text-align: center;
   `}
 `;
 

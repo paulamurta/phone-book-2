@@ -7,9 +7,18 @@ export const Container = styled.div<IContainer>`
   height: 6vh;
   padding: 0.5vw 1vw;
   border-radius: 1vh;
-  outline: 1.5px solid ${({ theme }) => theme.colors.border.main};
+  border: 1.5px solid ${({ theme }) => theme.colors.border.main};
   transition: all 0.2s ease-in;
   background-color: ${({ theme }) => theme.colors.background.white};
+
+  &:hover {
+    outline-width: 0.25vh;
+    border-color: ${({ theme }) => theme.colors.primary.main};
+  }
+
+  &:focus-within {
+    border: 2px solid ${({ theme }) => theme.colors.primary.main};
+  }
 
   input::placeholder {
     color: ${({ theme }) => theme.colors.light.main};
@@ -25,10 +34,6 @@ export const Container = styled.div<IContainer>`
     color: ${({ theme }) => theme.colors.dark.light};
     font-size: clamp(0.2rem, 0.17rem + 1.8vh, 3rem);
     font-family: "Inter 400";
-
-    &:focus {
-      outline: 0;
-    }
   }
 
   & button {

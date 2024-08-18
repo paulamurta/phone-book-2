@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 
 import { AppError, handleError } from "../common/app.Error";
 import { JwtTokenPayload } from "../common/app.type";
-import { contactSearchSerializer } from "../serializers/contact.serializer";
+import { IContactCreate, IContactPhotoCreate } from "../interfaces/contact";
+import {
+  contactSearchSerializer,
+  createContactSerializer,
+} from "../serializers/contact.serializer";
 import {
   createContactService,
   deleteContactService,
@@ -18,7 +22,30 @@ export const createContactController = async (req: Request, res: Response) => {
     const tokenPayload = jwtService.decodeTokenFromHeader(
       authHeader
     ) as JwtTokenPayload;
-    const newContact = await createContactService(req.body, tokenPayload.sub);
+
+    const rawBodyData: IContactCreate = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+      birthday: req.body.birthday || undefined,
+      email: req.body.email || undefined,
+    };
+
+    let photo: IContactPhotoCreate | undefined;
+    if (req.file) {
+      photo = {
+        mimeType: req.file?.mimetype,
+        photoData: req.file?.buffer,
+      };
+    }
+
+    const validated = await createContactSerializer.validate(rawBodyData);
+
+    const newContact = await createContactService(
+      validated,
+      tokenPayload.sub,
+      photo
+    );
     return res.status(201).json(newContact);
   } catch (err) {
     if (err instanceof AppError) {

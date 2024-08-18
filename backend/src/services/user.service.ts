@@ -34,4 +34,8 @@ export class UserService {
 
     return jwtToken;
   }
+
+  async getUser(userId: string) {
+    return this.userRepository.findOne(userId);
+  }
 }

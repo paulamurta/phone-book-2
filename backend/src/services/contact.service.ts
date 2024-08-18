@@ -3,6 +3,7 @@ import { AppError } from "../common/app.Error";
 import {
   IContact,
   IContactCreate,
+  IContactPhotoCreate,
   IContactSearch,
   IContactUpdate,
 } from "../interfaces/contact";
@@ -10,10 +11,11 @@ import { contactRepository } from "../repository/contact";
 
 export const createContactService = async (
   contact: IContactCreate,
-  ownerId: string
+  ownerId: string,
+  photo?: IContactPhotoCreate
 ): Promise<IContact> => {
   try {
-    const newContact = await contactRepository.create(contact, ownerId);
+    const newContact = await contactRepository.create(contact, ownerId, photo);
     return newContact;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -83,6 +85,9 @@ export const updateContactService = async (
     return updatedContact;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2025") {
+        throw new AppError(404, "Contact not found");
+      }
       throw new AppError(400, `${err.code}: ${err.message}`);
     }
     throw new AppError(500, (err as Error)?.message);

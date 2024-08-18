@@ -1,4 +1,5 @@
 import { Router } from "express";
+import multer from "multer";
 
 import {
   createContactController,
@@ -15,9 +16,12 @@ import {
 
 const router = Router();
 
+const storage = multer.memoryStorage();
+const uploadMiddleware = multer({ storage });
+
 router.post(
   "/contacts",
-  validateSerializerMiddleware(createContactSerializer),
+  uploadMiddleware.single("photo"),
   createContactController
 );
 router.get("/contacts", getContactsController);

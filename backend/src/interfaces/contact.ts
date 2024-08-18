@@ -10,6 +10,12 @@ export interface IContact {
   email: string | null;
   ownerId: string;
   groupId: string | null;
+  photo?: IContactPhoto;
+}
+
+export interface IContactPhotoCreate {
+  mimeType: string;
+  photoData: Buffer;
 }
 
 export interface IContactPhoto {

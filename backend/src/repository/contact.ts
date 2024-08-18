@@ -3,23 +3,46 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import {
   IContact,
   IContactCreate,
+  IContactPhotoCreate,
   IContactSearch,
   IContactUpdate,
 } from "../interfaces/contact";
 
 class ContactRepository {
-  private prisma = new PrismaClient();
+  private prisma = new PrismaClient({
+    log: ["error", "warn", "info", "query"],
+  });
 
   constructor() {}
 
-  async create(contact: IContactCreate, ownerId: string): Promise<IContact> {
-    const newContact = await this.prisma.contact.create({
-      data: {
-        ...contact,
-        ownerId,
-      },
-    });
-    return newContact as IContact;
+  async create(
+    contact: IContactCreate,
+    ownerId: string,
+    photo?: IContactPhotoCreate
+  ): Promise<IContact> {
+    let photoAggregate = {};
+    if (photo) {
+      photoAggregate = {
+        photo: {
+          create: {
+            mimeType: photo.mimeType,
+            photoData: photo.photoData,
+          },
+        },
+      };
+    }
+
+    const newContact = await this.prisma.$transaction([
+      this.prisma.contact.create({
+        data: {
+          ...contact,
+          ...photoAggregate,
+          ownerId,
+        },
+      }),
+    ]);
+
+    return newContact as unknown as IContact;
   }
 
   async getAll(ownerId: string, search: IContactSearch): Promise<IContact[]> {

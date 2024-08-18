@@ -16,6 +16,9 @@ export const WrapperModal = styled.div`
   align-items: flex-start;
   width: 100%;
   gap: 4vh;
+  height: 60vh;
+  overflow-y: scroll;
+  padding: 1vw;
 `;
 
 export const MainBox = styled.div<IMainBox>`

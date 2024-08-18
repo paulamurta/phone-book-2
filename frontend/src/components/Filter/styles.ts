@@ -17,7 +17,8 @@ export const ConfirmButton = styled.button<IConfirmButton>`
   display: flex;
   gap: 1vh;
   border: none;
-  background-color: transparent;
+  background-color: ${({ theme }) => theme.colors.background.white};
+
   font-family: "Inter 600", sans-serif;
   font-size: clamp(1.2vh, 0.3rem + 1.3vh, 2.5vh);
 
@@ -25,10 +26,15 @@ export const ConfirmButton = styled.button<IConfirmButton>`
     $clear ? theme.colors.danger.main : theme.colors.typography.darkGray};
 
   &:hover {
-    color: ${({ $clear, theme }) => ($clear ? null : theme.colors.light.main)};
+    background-color: ${({ theme }) =>
+      theme.colors.background.white} !important;
+    color: ${({ $clear, theme }) =>
+      $clear ? null : theme.colors.primary.main};
   }
 
   &:disabled {
+    background-color: ${({ theme }) => theme.colors.background.white};
+
     color: ${({ $clear, theme }) => ($clear ? null : theme.colors.light.main)};
   }
 `;

@@ -20,7 +20,7 @@ export const Header = styled.div`
   height: 7vh;
   gap: 2vh;
   padding-right: 1vw;
-  background-color: ${theme.colors.primary.main};
+  background-color: ${theme.colors.background.deepGray};
 `;
 
 export const UserInfo = styled.div`

@@ -19,7 +19,6 @@ import { IContact } from "../../interfaces/IContact";
 import { Card } from "../../components/Card";
 import { ButtonConfirm } from "../../components/Button/ButtonConfirm";
 import { SignOut } from "@phosphor-icons/react";
-import { useNavigate } from "react-router-dom";
 import { Tabs } from "../../components/Tabs";
 import { NewContact } from "./NewContact";
 import { EditContact } from "./EditContact";
@@ -50,7 +49,6 @@ function Contacts() {
   const [group, setGroup] = useState<ISelectCurrentValue | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const navigate = useNavigate();
   const { logout, name, email } = useAuthGlobal();
 
   const { refetch } = useQuery(

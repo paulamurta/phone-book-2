@@ -3,6 +3,7 @@ import styled from "styled-components";
 interface IButton {
   $width?: string;
   $color?: string;
+  $?: string;
 }
 
 export const Button = styled.button<IButton>`
@@ -21,6 +22,15 @@ export const Button = styled.button<IButton>`
   cursor: pointer;
   border: 1px solid
     ${({ theme, $color }) => ($color ? $color : theme.colors.typography.white)};
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.background.gray};
+    color: ${({ theme }) => theme.colors.typography.lightGray};
+    &:hover {
+      background-color: ${({ theme }) => theme.colors.background.gray};
+      color: ${({ theme }) => theme.colors.typography.lightGray};
+    }
+  }
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.typography.white};

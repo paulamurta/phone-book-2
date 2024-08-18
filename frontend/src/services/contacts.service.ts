@@ -28,5 +28,11 @@ export async function editContact(
   id: string | undefined,
   payload: IContactEdit,
 ): Promise<AxiosResponse> {
-  return await api.put(`/contacts/${id}`, payload);
+  return await api.patch(`/contacts/${id}`, payload);
+}
+
+export async function deleteContact(
+  id: string | undefined,
+): Promise<AxiosResponse> {
+  return await api.delete(`/contacts/${id}`);
 }

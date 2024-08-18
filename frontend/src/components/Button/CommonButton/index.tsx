@@ -7,9 +7,10 @@ export function CommonButton({
   text,
   icon,
   color,
+  disabled,
 }: CommonButtonProps) {
   return (
-    <Button $color={color} $width={width} onClick={onClick}>
+    <Button $color={color} $width={width} onClick={onClick} disabled={disabled}>
       {text}
       {icon && icon}
     </Button>

@@ -4,20 +4,18 @@ import { DefaultModal } from "../../components/Modal/DefaultModal";
 import { ISelectCurrentValue } from "../../components/Select/types";
 import { useState } from "react";
 import { ManageGroupsProps } from "./types";
-import { Body1, Body2, Body3, Header4 } from "../../styles/typography";
+import { Header4 } from "../../styles/typography";
 import { GroupCard } from "./Components/GroupCard";
 import { ModalConfirm } from "./../../components/Modal/ModalConfirm/index";
 import { CardsContainer } from "./Components/GroupCard/styles";
 import { ButtonConfirm } from "../../components/Button/ButtonConfirm";
 import { NewGroup } from "./NewGroup/index";
-import { ContainerColumn, ContainerRow } from "../../styles/global";
 import { WrapperGroups } from "./styles";
 
 export function ManageGroups({
   isManageGroupsOpen,
   closeManageGroups,
 }: ManageGroupsProps) {
-  const { colors: theme } = useTheme();
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
   const [group, setGroup] = useState<ISelectCurrentValue | null>(null);

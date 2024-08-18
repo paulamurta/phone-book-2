@@ -31,11 +31,14 @@ import {
 import { Filter } from "../../components/Filter";
 import { ISelectCurrentValue } from "../../components/Select/types";
 import { ManageGroups } from "../Groups";
+import { useAuthGlobal } from "../../contexts/AuthContext/useAuthGlobal";
+import { ModalConfirm } from "../../components/Modal/ModalConfirm";
 
 function Contacts() {
   const { colors: theme } = useTheme();
   const [searchParam, setSearchParam] = useState("");
   const [contacts, setContacts] = useState<IContact[]>([]);
+  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [isManageGroupsOpen, setIsManageGroupsOpen] = useState(false);
   const [isNewContactOpen, setIsNewContactOpen] = useState(false);
   const [isEditContactOpen, setIsEditContactOpen] = useState(false);
@@ -48,6 +51,7 @@ function Contacts() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
+  const { logout, name, email } = useAuthGlobal();
 
   const { refetch } = useQuery(
     ["contacts", searchParam, group],
@@ -76,8 +80,21 @@ function Contacts() {
     setIsFilterOpen(false);
   };
 
+  function handleCloseModal() {
+    setIsModalConfirmOpen(false);
+    logout && logout();
+  }
+
   return (
     <>
+      <ModalConfirm
+        isModalActive={isModalConfirmOpen}
+        setIsModalActive={setIsModalConfirmOpen}
+        handleCancel={() => setIsModalConfirmOpen(false)}
+        handleClose={handleCloseModal}
+        title="Logout?"
+        message="You are leaving this session."
+      />
       <ManageGroups
         isManageGroupsOpen={isManageGroupsOpen}
         closeManageGroups={() => {
@@ -119,15 +136,17 @@ function Contacts() {
       >
         <Header>
           <UserInfo>
-            <Body3 $fontColor={theme.typography.white}>John Snow</Body3>
+            <Body3 $fontColor={theme.typography.white}>{name}</Body3>
             <Small $bold $fontColor={theme.typography.white}>
-              john@snow.com
+              {email}
             </Small>
           </UserInfo>
           <AvatarContainer>
-            <Body1 $fontColor={theme.typography.darkGray}>J</Body1>
+            <Body1 $fontColor={theme.typography.darkGray}>
+              {name?.split("")[0]}
+            </Body1>
           </AvatarContainer>
-          <SignOutButton onClick={() => navigate("/home")}>
+          <SignOutButton onClick={() => setIsModalConfirmOpen(true)}>
             <SignOut weight={"bold"} />
           </SignOutButton>
         </Header>

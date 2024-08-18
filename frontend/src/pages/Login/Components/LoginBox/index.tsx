@@ -13,10 +13,7 @@ export default function LoginBox({ setIsLoginShown }: any) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const {
-    login,
-    // errorLogin, setErrorLogin, isLogout, setIsLogout, token
-  } = useAuthGlobal();
+  const { login } = useAuthGlobal();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -61,6 +58,7 @@ export default function LoginBox({ setIsLoginShown }: any) {
           <CommonButton
             width={"30%"}
             text={"LOGIN"}
+            disabled={!email || !password}
             color={theme.typography.body}
             icon={<ArrowRight />}
             onClick={() => setIsLoginShown(true)}

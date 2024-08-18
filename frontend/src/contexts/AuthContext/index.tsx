@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setTokenLocalStorage, setUserIdLocalStorage } from "./utils";
+import { setTokenLocalStorage } from "./utils";
 import toast from "react-hot-toast";
 import { IAuthContext, IAuthProvider } from "./types";
 import api from "../../services/Api";
-import { whoAmI } from "../../services/auth.service";
+import { whoAmI } from "../../services/users.service";
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
@@ -26,25 +26,22 @@ export function AuthProvider({ children }: IAuthProvider) {
     await api
       .post("auth/login", body)
       .then((response) => {
-        setTokenLocalStorage(response.data.token);
-        setUserIdLocalStorage(response.data.id);
-        setName(response.data.name);
-        setEmail(response.data.email);
+        setTokenLocalStorage(response?.data?.accessToken);
         setErrorLogin(false);
-        navigate("/home");
+        navigate("/contacts");
+        toast.success("Login successful! Welcome back!");
       })
       .catch(async (error) => {
         toast.dismiss();
         setErrorLogin(true);
-        toast.error(error.response?.data?.message || "An error ocurred");
+        toast.error(error?.response?.data?.message);
       });
   }
 
   async function logout() {
-    localStorage.removeItem("userId");
     localStorage.removeItem("token");
     setIsLogout(true);
-    navigate("/login");
+    navigate("/home");
   }
 
   async function fetchMyData() {
@@ -54,6 +51,7 @@ export function AuthProvider({ children }: IAuthProvider) {
         const response = await whoAmI();
         const userData = response.data;
         setName(userData.name);
+        setEmail(userData.email);
       } catch (error) {}
     }
   }

@@ -3,5 +3,9 @@ export type JwtTokenPayload = {
   sub: string;
   iat: number;
   exp?: number;
+};
+
+export type JwtUserDataPayload = {
+  id: string;
   email: string;
 };

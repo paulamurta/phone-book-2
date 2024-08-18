@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import {
   createContactService,
   deleteContactService,
@@ -8,10 +9,16 @@ import {
   updateContactService,
 } from "../services/contact.service";
 import { AppError, handleError } from "../common/app.Error";
+import { jwtService } from "../services/jwt.service";
+import { JwtTokenPayload } from "../common/app.type";
 
 export const createContactController = async (req: Request, res: Response) => {
   try {
-    const newContact = await createContactService(req.body);
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+    const newContact = await createContactService(req.body, tokenPayload.sub);
     return res.status(201).json(newContact);
   } catch (err) {
     if (err instanceof AppError) {

@@ -1,10 +1,8 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 import { IUserCreate } from "../interfaces/user";
 import { UserRepository } from "../repository/user";
-import { APP_CONFIG } from "../config/app.config";
-import { JwtTokenPayload } from "../common/app.type";
+import { jwtService } from "./jwt.service";
 
 export class UserService {
   private userRepository = new UserRepository();
@@ -29,16 +27,9 @@ export class UserService {
 
   async createAccessToken(email: string) {
     const user = await this.userRepository.findByEmail(email);
-
-    const tokenPayload: JwtTokenPayload = {
-      iss: APP_CONFIG.jwtIssuer,
+    const jwtToken = jwtService.createAccessToken({
       sub: user.id,
       email: user.email,
-      iat: Date.now(),
-    };
-
-    const jwtToken = jwt.sign(tokenPayload, APP_CONFIG.jwtKey, {
-      expiresIn: APP_CONFIG.jwtExpirationInSeconds,
     });
 
     return jwtToken;

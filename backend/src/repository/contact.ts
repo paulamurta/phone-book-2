@@ -1,107 +1,62 @@
-import { IContact, IContactCreate } from "../interfaces/contact";
-import { readFileSync } from "fs";
-import fs from "fs/promises";
-import { v4 as uuidv4, v4 } from "uuid";
+import { PrismaClient } from "@prisma/client";
+
+import {
+  IContact,
+  IContactCreate,
+  IContactUpdate,
+} from "../interfaces/contact";
 
 class ContactRepository {
-  private contacts: IContact[] = [];
+  private prisma = new PrismaClient();
 
-  constructor() {
-    this.loadFromFile();
-  }
+  constructor() {}
 
-  private async loadFromFile() {
-    try {
-      const data = readFileSync("./localdb.json");
-      this.contacts = JSON.parse(data.toString());
-    } catch (error) {
-      fs.writeFile("./localdb.json", "");
-    }
-  }
-
-  private saveToFile() {
-    return fs.writeFile("./localdb.json", JSON.stringify(this.contacts));
-  }
-
-  create(contact: IContactCreate): Promise<IContact> {
-    return new Promise((resolve, reject) => {
-      const newContact: IContact = {
+  async create(contact: IContactCreate, ownerId: string): Promise<IContact> {
+    const newContact = await this.prisma.contact.create({
+      data: {
         ...contact,
-        id: v4(),
-      };
-
-      this.contacts.push(newContact);
-      this.saveToFile()
-        .then(() => resolve(newContact))
-        .catch((err) => reject(err));
+        ownerId,
+      },
     });
+    return newContact as IContact;
   }
 
   getAll(): Promise<IContact[]> {
-    return new Promise((resolve, reject) => {
-      resolve(this.contacts);
-    });
+    return this.prisma.contact.findMany();
   }
 
-  findByPhone(phone: string): Promise<IContact | undefined> {
-    return new Promise((resolve, reject) => {
-      const foundContact = this.contacts.find(
-        (contact) => contact.phone === phone
-      );
-      this.saveToFile();
-      resolve(foundContact);
+  async findByPhone(phone: string): Promise<IContact | undefined> {
+    const foundContact = await this.prisma.contact.findUnique({
+      where: { phoneNumber: phone },
     });
+    return foundContact as IContact;
   }
 
-  findByLastName(lastName: string): Promise<IContact[]> {
-    return new Promise((resolve, reject) => {
-      const matchingContacts = this.contacts.filter((contact) =>
-        contact.lastName.toUpperCase().includes(lastName.toUpperCase())
-      );
-      this.saveToFile();
-      resolve(matchingContacts);
+  async findByLastName(lastName: string): Promise<IContact[]> {
+    const foundContacts = await this.prisma.contact.findMany({
+      where: { lastName: { contains: lastName } },
     });
+    return foundContacts as IContact[];
   }
 
-  findById(id: string): Promise<IContact | undefined> {
-    return new Promise((resolve, reject) => {
-      const foundContact = this.contacts.find((contact) => contact.id === id);
-      this.saveToFile();
-      resolve(foundContact);
+  async findById(id: string): Promise<IContact | undefined> {
+    const foundContact = await this.prisma.contact.findUnique({
+      where: { id },
     });
+    return foundContact as IContact;
   }
 
-  findIndexById(id: string): Promise<number> {
-    return new Promise((resolve, reject) => {
-      const foundIndex = this.contacts.findIndex((contact) => contact.id == id);
-
-      resolve(foundIndex);
-    });
+  async delete(id: string) {
+    await this.prisma.contact.delete({ where: { id } });
   }
 
-  deleteContactByIndex(foundIndex: number) {
-    return new Promise(async (resolve, reject) => {
-      this.contacts.splice(foundIndex, 1);
-
-      this.saveToFile()
-        .then(() => resolve(undefined))
-        .catch((err) => reject(err));
+  async patchContact(id: string, data: IContactUpdate): Promise<IContact> {
+    const updatedContact = await this.prisma.contact.update({
+      where: { id },
+      data: data,
     });
-  }
 
-  updateContactByIndex(foundIndex: number, contact: IContactCreate) {
-    return new Promise(async (resolve, reject) => {
-      const updatedContact = {
-        ...this.contacts[foundIndex],
-        ...contact,
-      };
-
-      this.contacts.splice(foundIndex, 1, updatedContact);
-
-      this.saveToFile()
-        .then(() => resolve(updatedContact))
-        .catch((err) => reject(err));
-    });
+    return updatedContact as IContact;
   }
 }
 

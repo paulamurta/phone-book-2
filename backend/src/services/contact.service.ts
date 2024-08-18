@@ -1,16 +1,28 @@
+import { Prisma } from "@prisma/client";
 import { AppError } from "../common/app.Error";
-import { IContact, IContactCreate } from "../interfaces/contact";
+import {
+  IContact,
+  IContactCreate,
+  IContactUpdate,
+} from "../interfaces/contact";
 import { contactRepository } from "../repository/contact";
 
 export const createContactService = async (
-  contact: IContactCreate
+  contact: IContactCreate,
+  ownerId: string
 ): Promise<IContact> => {
-  const foundContact = await contactRepository.findByPhone(contact.phone);
-
-  if (foundContact) {
-    throw new AppError(400, "Phone number already registered");
+  try {
+    const newContact = contactRepository.create(contact, ownerId);
+    return newContact;
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2002") {
+        throw new AppError(400, "Phone number already registered");
+      }
+      throw new AppError(400, `${err.code}: ${err.message}`);
+    }
+    throw new AppError(400, (err as Error)?.message);
   }
-  return contactRepository.create(contact);
 };
 
 export const getContactsService = async (): Promise<IContact[]> => {
@@ -35,32 +47,33 @@ export const getContactByIdService = async (
 };
 
 export const deleteContactService = async (id: string) => {
-  const foundIndex = await contactRepository.findIndexById(id);
-
-  if (foundIndex == -1) {
-    throw new AppError(404, "Contact not found.");
+  try {
+    await contactRepository.delete(id);
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new AppError(400, `${err.code}: ${err.message}`);
+    }
+    throw new AppError(500, (err as Error)?.message);
   }
-  return contactRepository.deleteContactByIndex(foundIndex);
 };
 
-export const updateContactService = async (id: string, contact: IContact) => {
-  const { firstName, lastName, phone } = contact;
+export const updateContactService = async (
+  id: string,
+  contact: IContactUpdate
+) => {
+  const hasChangedValue = Object.values(contact).some((value) => !!value);
 
-  if (!firstName && !lastName && !phone) {
-    throw new AppError(422, "At least one field must be filled");
+  if (hasChangedValue) {
+    throw new AppError(422, "At least one field must be filled for update");
   }
 
-  const foundIndex = await contactRepository.findIndexById(id);
-
-  if (foundIndex === -1) {
-    throw new AppError(404, "Contact not found.");
+  try {
+    const updatedContact = contactRepository.patchContact(id, contact);
+    return updatedContact;
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new AppError(400, `${err.code}: ${err.message}`);
+    }
+    throw new AppError(500, (err as Error)?.message);
   }
-
-  const foundContact = await contactRepository.findByPhone(phone);
-
-  if (foundContact && foundContact.id !== id) {
-    throw new AppError(400, "Phone number already registered");
-  }
-
-  return contactRepository.updateContactByIndex(foundIndex, contact);
 };

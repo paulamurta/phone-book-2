@@ -32,7 +32,7 @@ export const loginController = async (req: Request, res: Response) => {
       return res.status(401).send({ message: "Invalid credentials" });
     }
 
-    const token = userService.createAccessToken(email);
+    const token = await userService.createAccessToken(email);
     return res.status(200).send({ accessToken: token });
   } catch (err) {
     if (err instanceof ValidationError) {

@@ -15,11 +15,14 @@ tags:
     description: Contacts related routes
   - name: Group
     description: Groups related routes
+security:
+  - BearerAuth: []
 paths:
   /api/auth/login:
     post:
       tags:
         - Auth
+      security: []
       requestBody:
         required: true
         content:
@@ -45,6 +48,203 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/auth/signup:
+    post:
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Any other error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/contacts:
+    get:
+      summary: List all Contacts
+      tags:
+        - Contact
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Create a contact
+      tags:
+        - Contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreate"
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: Error on submited data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/contacts/{contactId}:
+    get:
+      summary: Get a contact by ID
+      tags:
+        - Contact
+      parameters:
+        - in: path
+          name: contactId
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      summary: Patches changes in a contact
+      tags:
+        - Contact
+      parameters:
+        - in: path
+          name: contactId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactUpdate"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: Error on submited data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Deletes a single contact
+      tags:
+        - Contact
+      parameters:
+        - in: path
+          name: contactId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          description: Successful operation
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   securitySchemes:
     BearerAuth:
@@ -67,9 +267,125 @@ components:
           type: string
           minLength: 4
           format: password
+      required:
+        - email
+        - password
     LoginResponse:
       type: object
       properties:
         accessToken:
           type: string
           description: Access token to be used on the application
+      required:
+        - accessToken
+    SignupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          minLength: 4
+          format: password
+      required:
+        - name
+        - email
+        - password
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 254
+        createdAt:
+          type: string
+          format: date
+        updated:
+          type: string
+          format: date
+      required:
+        - id
+        - email
+        - name
+    ContactCreate:
+      type: object
+      properties:
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        phoneNumber:
+          type: string
+          maxLength: 15
+        email:
+          type: string
+          maxLength: 254
+        birthday:
+          type: string
+          format: date
+      required:
+        - firstName
+        - lastName
+        - phoneNumber
+    Contact:
+      allOf:
+        - $ref: "#/components/schemas/ContactCreate"
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            favorite:
+              type: boolean
+            ownerId:
+              type: string
+              format: uuid
+            groupId:
+              type: string
+              format: uuid
+            createdAt:
+              type: string
+              format: date
+            updated:
+              type: string
+              format: date
+          required:
+            - id
+            - createdAt
+            - updatedAt
+    ContactUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        phoneNumber:
+          type: string
+          maxLength: 15
+        email:
+          type: string
+          maxLength: 254
+        birthday:
+          type: string
+          format: date
+        favorite:
+          type: boolean
+        groupId:
+          type: string
+          format: uuid

@@ -155,16 +155,19 @@ class ContactRepository {
     const updatedContact = await this.prisma.$transaction(
       async (transaction) => {
         if (photo === null) {
-          transaction.contactPhoto.delete({ where: { contactId: id } });
+          await transaction.contactPhoto.delete({ where: { contactId: id } });
         } else if (photo) {
-          this.prisma.contactPhoto.update({
+          const dbPhotoData = {
+            photoData: photo.photoData,
+            mimeType: photo.mimeType,
+          };
+
+          await this.prisma.contactPhoto.upsert({
             where: {
               contactId: id,
             },
-            data: {
-              photoData: photo.photoData,
-              mimeType: photo.mimeType,
-            },
+            create: { ...dbPhotoData, contactId: id },
+            update: dbPhotoData,
           });
         }
 

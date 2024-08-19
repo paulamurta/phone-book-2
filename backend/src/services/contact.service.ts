@@ -71,9 +71,11 @@ export const updateContactService = async (
   photo: IContactPhotoCreate | undefined | null,
   ownerId: string
 ) => {
-  const doHaveChanges = Object.values(contact).some(
-    (value) => value !== null && value !== undefined && value !== ""
-  );
+  const doHaveChanges =
+    photo ||
+    Object.values(contact).some(
+      (value) => value !== null && value !== undefined && value !== ""
+    );
 
   if (!doHaveChanges) {
     throw new AppError(422, "At least one field must be filled for update");

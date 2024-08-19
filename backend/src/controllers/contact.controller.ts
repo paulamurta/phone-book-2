@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 
 import { AppError, handleError } from "../common/app.Error";
 import { JwtTokenPayload } from "../common/app.type";
-import { IContactCreate, IContactPhotoCreate } from "../interfaces/contact";
+import {
+  IContactCreate,
+  IContactPhotoCreate,
+  IContactUpdate,
+} from "../interfaces/contact";
 import {
   contactSearchSerializer,
   createContactSerializer,
@@ -122,7 +126,15 @@ export const updateContactController = async (req: Request, res: Response) => {
       authHeader
     ) as JwtTokenPayload;
 
-    const validated = await updateContactSerializer.validate(req.body);
+    const rawBodyData: IContactUpdate = {
+      firstName: req.body.firstName || undefined,
+      lastName: req.body.lastName || undefined,
+      phoneNumber: req.body.phoneNumber || undefined,
+      birthday: req.body.birthday || undefined,
+      email: req.body.email || undefined,
+      groupId: req.body.groupId || undefined,
+      favorite: req.body.favorite || undefined,
+    };
 
     let photo: IContactPhotoCreate | undefined | null;
     if (req.file === null) {
@@ -134,7 +146,7 @@ export const updateContactController = async (req: Request, res: Response) => {
       };
     }
 
-    await updateContactService(id, validated, photo, tokenPayload.sub);
+    await updateContactService(id, rawBodyData, photo, tokenPayload.sub);
     return res.status(204).send({ message: "Contact successfully updated" });
   } catch (err) {
     if (err instanceof AppError) {

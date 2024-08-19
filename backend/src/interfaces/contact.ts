@@ -41,6 +41,7 @@ export interface IContactUpdate {
   email?: string;
   favorite?: boolean;
   groupId?: string;
+  birthday?: Date;
 }
 
 export interface IContactSearch {

@@ -25,15 +25,15 @@ CREATE TABLE "Group" (
 CREATE TABLE "Contact" (
     "id" TEXT NOT NULL,
     "fullName" VARCHAR(200) NOT NULL,
-    "photoData" BYTEA NOT NULL,
-    "birthday" DATE NOT NULL,
+    "photoData" BYTEA,
+    "birthday" DATE,
     "phoneNumber" VARCHAR(14) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "favorit" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ownerId" TEXT NOT NULL,
-    "groupId" TEXT NOT NULL,
+    "groupId" TEXT,
 
     CONSTRAINT "Contact_pkey" PRIMARY KEY ("id")
 );

@@ -2,7 +2,11 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "ts-node-dev --ignore-watch node_modules src/app.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "seed:build": "tsc --project ./tsconfig.seed.json"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -21,6 +25,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@prisma/client": "^5.18.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

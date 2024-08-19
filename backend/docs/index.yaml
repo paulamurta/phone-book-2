@@ -622,6 +622,9 @@ components:
         groupId:
           type: string
           format: uuid
+        photo:
+          type: string
+          format: binary
     GroupCreateUpdate:
       type: object
       properties:

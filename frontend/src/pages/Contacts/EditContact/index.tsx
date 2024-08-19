@@ -277,7 +277,7 @@ export function EditContact({
                 <LabelText>Birthday</LabelText>
                 <DateRangePicker
                   isSingleDate
-                  singleDate={birthday}
+                  singleDate={birthday ? new Date(birthday) : null}
                   setSingleDate={setBirthday}
                 />
               </ContainerColumn>

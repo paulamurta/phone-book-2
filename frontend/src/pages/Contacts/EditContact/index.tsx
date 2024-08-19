@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import {
   ButtonsBox,
   ContainerColumn,
@@ -58,7 +58,6 @@ export function EditContact({
     },
     {
       onSuccess: (dataOnSuccess) => {
-        console.log("dataOnSuccess: ", dataOnSuccess);
         setFirstName(dataOnSuccess?.data.firstName);
         setLastName(dataOnSuccess?.data.lastName);
         setEmail(dataOnSuccess?.data.email);

@@ -22,8 +22,7 @@ export const Wrapper = styled.div<IBox>`
 
   &:hover {
     cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-    background-color: ${({ theme, $disabled }) =>
-      $disabled ? "transparent" : theme.colors.calendar.inputHover};
+    background-color: ${({ $disabled }) => ($disabled ? "transparent" : "")};
     transition: all 0.2s ease-in;
   }
 
@@ -185,7 +184,7 @@ export const Buttons = styled.div`
 export const TextBox = styled.div<IBox>`
   //input
   text-transform: capitalize;
-  width: ${({ $singleDate }) => ($singleDate ? "8vw" : "10vw")};
+  width: 10vw;
   display: flex;
   align-items: center;
   justify-content: center;

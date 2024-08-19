@@ -20,7 +20,7 @@ export function EditGroup({
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>("");
 
-  useQuery(
+  const { data } = useQuery(
     ["keyId", keyId],
 
     () => {
@@ -33,6 +33,8 @@ export function EditGroup({
       enabled: !!keyId,
     },
   );
+
+  const nameChange = groupName !== data?.data.name;
 
   function onTryToClose() {
     setIsModalConfirmOpen(true);
@@ -96,7 +98,7 @@ export function EditGroup({
               <ButtonConfirm
                 label={"Save"}
                 type="submit"
-                disabled={!groupName}
+                disabled={!groupName || !nameChange}
                 width="15vw"
               />
               <ButtonCancel

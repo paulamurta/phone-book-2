@@ -38,7 +38,7 @@ export function Card({
   phone,
   email,
   photo,
-  // groupName,
+  groupName,
   birthday,
   favorite,
   setModalEditContact,
@@ -61,7 +61,9 @@ export function Card({
 
     await editContact(id, formData)
       .then(() => {
-        toast.success("Contact added to favorites successfully!");
+        favorite
+          ? toast.success("Contact removed from favorites successfully!")
+          : toast.success("Contact added to favorites successfully!");
       })
       .catch(() => {
         toast.error("Something went wrong.");
@@ -102,9 +104,11 @@ export function Card({
                 </FavoriteButton>
               </CustomTooltip>
             </ContainerRow>
-            <Body4 $bold $fontColor={theme.typography.darkGray}>
-              Group
-            </Body4>
+            {groupName && (
+              <Body4 $bold $fontColor={theme.typography.darkGray}>
+                {groupName}
+              </Body4>
+            )}
           </NameAndGroupContainer>
           <ContainerRow $position="left">
             <DataContainer>

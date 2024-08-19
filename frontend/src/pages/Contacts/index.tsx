@@ -34,6 +34,7 @@ function Contacts() {
   const { colors: theme } = useTheme();
   const [searchParam, setSearchParam] = useState("");
   const [contacts, setContacts] = useState<IContact[]>([]);
+
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [isManageGroupsOpen, setIsManageGroupsOpen] = useState(false);
   const [isNewContactOpen, setIsNewContactOpen] = useState(false);
@@ -49,13 +50,32 @@ function Contacts() {
   const { logout, name, email } = useAuthGlobal();
 
   const { refetch } = useQuery(
-    ["contacts", searchParam, group, isFavoriteTabOn],
+    ["contacts", searchParam, group?.id, isFavoriteTabOn],
     () => {
       return getAllContacts(searchParam, isFavoriteTabOn, group?.id);
     },
     {
       onSuccess: (dataOnSuccess) => {
-        setContacts(dataOnSuccess?.data);
+        const processedContacts = dataOnSuccess?.data.map(
+          (contact: IContact) => {
+            if (contact.photo && contact.photo.photoData?.data) {
+              const byteArray = new Uint8Array(contact.photo.photoData.data);
+
+              const base64String = btoa(
+                byteArray.reduce(
+                  (data, byte) => data + String.fromCharCode(byte),
+                  "",
+                ),
+              );
+              contact.photoUrl = `data:${contact.photo.mimeType};base64,${base64String}`;
+            } else {
+              contact.photoUrl = null;
+            }
+            return contact;
+          },
+        );
+
+        setContacts(processedContacts);
       },
     },
   );
@@ -202,8 +222,8 @@ function Contacts() {
                   email={contact.email}
                   favorite={contact.favorite}
                   birthday={contact?.birthday || null}
-                  // groupName={contact?.groupId}
-                  photo={contact?.photo || null}
+                  groupName={contact?.group?.name}
+                  photo={contact?.photoUrl || null}
                   setModalEditContact={setIsEditContactOpen}
                   modalEditContact={isEditContactOpen}
                   setModalDeleteContact={setIsDeleteContactOpen}

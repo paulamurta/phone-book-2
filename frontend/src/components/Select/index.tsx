@@ -84,7 +84,7 @@ export function Select({
           paddingRight: "1.2vw !important",
           paddingLeft: "1.2vw !important",
           fontSize: "clamp(1.7vh, 0.5rem + 4vh, 1.8vh)",
-          fontFamily: "Inter 400",
+          fontFamily: "'Inter 400'",
           height: "5vh",
           borderRadius: "10vh",
           backgroundColor: "transparent",
@@ -122,11 +122,11 @@ export function Select({
         "& input": {
           paddingLeft: 0,
           paddingRight: 0,
-          fontSize: "clamp(1.7vh, 0.5rem + 4vh, 1.8vh)",
+          fontSize: "clamp(0.2rem, 0.17rem + 1.8vh, 3rem)",
           fontFamily: "Inter 400",
           "&::placeholder": {
-            fontFamily: "Inter 400",
-            fontSize: "clamp(1.7vh, 0.5rem + 4vh, 1.8vh)",
+            fontFamily: "'Inter 400'",
+            fontSize: "clamp(0.2rem, 0.17rem + 1.8vh, 3rem)",
             color: `${theme.input.placeholder} !important`,
             opacity: 1,
           },

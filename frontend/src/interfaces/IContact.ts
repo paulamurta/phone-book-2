@@ -6,8 +6,9 @@ export interface IContact {
   email?: string;
   birthday: string | null;
   favorite: boolean;
-  groupId?: string | null;
-  photo?: string | null;
+  group?: { id: string; name: string } | null;
+  photoUrl?: string | null;
+  photo?: any;
 }
 
 export interface IContactCreate {

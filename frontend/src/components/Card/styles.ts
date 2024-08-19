@@ -55,7 +55,7 @@ export const UserPhotoBox = styled.div`
 export const UserPhoto = styled.img`
   height: 100%;
   width: 100%;
-  border-radius: 50vw;
+  border-radius: 50vw !important;
   object-fit: cover;
 `;
 

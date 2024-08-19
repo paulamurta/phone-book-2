@@ -22,6 +22,9 @@ import {
   formatToSlashStyle,
 } from "../../../common/utils/format/formatDate";
 import { AddPhoto } from "../../../components/AddPhoto";
+import { Select } from "../../../components/Select";
+import { ISelectCurrentValue } from "../../../components/Select/types";
+import { useFetchGroups } from "../../../hooks/useFetchGroups";
 
 export function NewContact({
   isNewContactOpen,
@@ -36,7 +39,10 @@ export function NewContact({
   const [acceptedFileSize, setAcceptedFileSize] = useState(true);
   const [acceptedFileType, setAcceptedFileType] = useState(true);
   const [photo, setPhoto] = useState<File | string>("");
+  const [group, setGroup] = useState<ISelectCurrentValue | null>(null);
   const [photoPath, setPhotoPath] = useState<string>("");
+
+  const { groups } = useFetchGroups();
 
   const isFormValid =
     firstName &&
@@ -54,6 +60,7 @@ export function NewContact({
     setLastName("");
     setPhone("");
     setEmail("");
+    setGroup(null);
     setPhoto("");
     setPhotoPath("");
     setAcceptedFileSize(true);
@@ -73,6 +80,9 @@ export function NewContact({
     formData.append("lastName", lastName);
     formData.append("phoneNumber", phone);
 
+    if (group) {
+      formData.append("groupId", group.id);
+    }
     if (email) {
       formData.append("email", email);
     }
@@ -155,16 +165,34 @@ export function NewContact({
                 }}
               />
             </ContainerRow>
-            <DefaultInput
-              width="100%"
-              key="E-mail"
-              label={"E-mail"}
-              value={email}
-              placeholder={"mail@website.com"}
-              onChange={(value) => {
-                setEmail(value);
-              }}
-            />
+            <ContainerRow>
+              <DefaultInput
+                key="E-mail"
+                label={"E-mail"}
+                value={email}
+                placeholder={"mail@website.com"}
+                onChange={(value) => {
+                  setEmail(value);
+                }}
+              />
+              <ContainerColumn $width={"20vw"} $position="top">
+                <LabelText>Group</LabelText>
+                <Select
+                  required={true}
+                  width="100%"
+                  id="group"
+                  placeholder="None"
+                  key={"group"}
+                  values={groups}
+                  onChangeValue={(groupObject: ISelectCurrentValue | null) =>
+                    setGroup(groupObject)
+                  }
+                  currentValue={group}
+                  fullWidth
+                />
+              </ContainerColumn>
+            </ContainerRow>
+
             <ContainerRow>
               <MaskInput
                 mask="999-999-9999"

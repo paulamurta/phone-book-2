@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import {
   ButtonsBox,
   ContainerColumn,
@@ -26,6 +26,9 @@ import {
 } from "../../../common/utils/format/formatDate";
 import DateRangePicker from "../../../components/DateRangePicker";
 import { AddPhoto } from "../../../components/AddPhoto";
+import { ISelectCurrentValue } from "../../../components/Select/types";
+import { Select } from "../../../components/Select";
+import { useFetchGroups } from "../../../hooks/useFetchGroups";
 
 export function EditContact({
   isEditContactOpen,
@@ -37,6 +40,7 @@ export function EditContact({
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [group, setGroup] = useState<ISelectCurrentValue | null>(null);
   const [phone, setPhone] = useState<string>("");
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [photo, setPhoto] = useState<File | string>("");
@@ -44,6 +48,7 @@ export function EditContact({
   const [hasImgChanged, setHasImgChanged] = useState<boolean>(false);
   const [acceptedFileSize, setAcceptedFileSize] = useState(true);
   const [acceptedFileType, setAcceptedFileType] = useState(true);
+  const { groups } = useFetchGroups();
 
   const { data } = useQuery(
     ["keyId", keyId],
@@ -57,16 +62,45 @@ export function EditContact({
         setEmail(dataOnSuccess?.data.email);
         setPhone(dataOnSuccess?.data.phoneNumber);
         setBirthday(dataOnSuccess?.data.birthday);
-        setPhoto(dataOnSuccess?.data.photo);
+        if (dataOnSuccess?.data.groupId) {
+          setGroup({
+            id: dataOnSuccess?.data.groupId,
+            value: dataOnSuccess?.data.name,
+          });
+        }
+
+        if (
+          dataOnSuccess?.data.photo &&
+          dataOnSuccess?.data.photo.photoData?.data
+        ) {
+          const byteArray = new Uint8Array(
+            dataOnSuccess.data.photo.photoData.data,
+          );
+          const base64String = btoa(
+            byteArray.reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              "",
+            ),
+          );
+          const photoUrl = `data:${dataOnSuccess.data.photo.mimeType};base64,${base64String}`;
+          setPhoto(photoUrl);
+        } else {
+          setPhoto("");
+        }
       },
       enabled: !!keyId,
     },
   );
 
+  // useEffect(() => {
+  //   console.log(" photo => " + photo);
+  // }, []);
+
   const isThereANewFirstName = firstName !== data?.data.firstName;
   const isThereANewLastName = lastName !== data?.data.lastName;
   const isThereANewPhone = phone !== data?.data.phoneNumber;
   const isThereANewEmail = email !== data?.data.email;
+  const isThereANewGroup = group?.id !== data?.data.groupId;
   const isThereANewBirthday = birthday !== data?.data.birthday;
   const firstPhoto = !data?.data.photo && !!photoPath;
   const hadPhotoButDeleted = !!data?.data.photo && hasImgChanged;
@@ -80,6 +114,7 @@ export function EditContact({
       isThereANewLastName ||
       (isThereANewPhone && phone.length === 10) ||
       isThereANewEmail ||
+      isThereANewGroup ||
       isThereANewBirthday);
 
   function handleCancelModal() {
@@ -92,6 +127,7 @@ export function EditContact({
     setLastName("");
     setPhone("");
     setEmail("");
+    setGroup(null);
     setPhoto("");
     setPhotoPath("");
     setAcceptedFileSize(true);
@@ -111,6 +147,9 @@ export function EditContact({
     formData.append("lastName", lastName);
     formData.append("phoneNumber", phone);
 
+    if (group) {
+      formData.append("groupId", group.id);
+    }
     if (email) {
       formData.append("email", email);
     }
@@ -194,16 +233,33 @@ export function EditContact({
                 }}
               />
             </ContainerRow>
-            <DefaultInput
-              width="100%"
-              key="E-mail"
-              label={"E-mail"}
-              value={email}
-              placeholder={"mail@website.com"}
-              onChange={(value) => {
-                setEmail(value);
-              }}
-            />
+            <ContainerRow>
+              <DefaultInput
+                key="E-mail"
+                label={"E-mail"}
+                value={email}
+                placeholder={"mail@website.com"}
+                onChange={(value) => {
+                  setEmail(value);
+                }}
+              />
+              <ContainerColumn $width={"20vw"} $position="top">
+                <LabelText>Group</LabelText>
+                <Select
+                  required={true}
+                  width="100%"
+                  id="group"
+                  placeholder="None"
+                  key={"group"}
+                  values={groups}
+                  onChangeValue={(groupObject: ISelectCurrentValue | null) =>
+                    setGroup(groupObject)
+                  }
+                  currentValue={group}
+                  fullWidth
+                />
+              </ContainerColumn>
+            </ContainerRow>
             <ContainerRow>
               <MaskInput
                 mask="999-999-9999"

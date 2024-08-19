@@ -32,8 +32,10 @@ This application can be partially run with Docker Compose.
 
 1. Clone this repository and navigate to the backend directory
 
-2. ***EXCEPTION: NOTE FOR WINDOWS USERS*** 
+2. ***EXCEPTION: NOTE FOR WINDOWS USERS***
+
 If you encounter issues with the entrypoint.sh file, follow these steps:
+
 Navigate to the /backend/scripts directory and run the following command:
 ```
 dos2unix entrypoint.sh

@@ -1,4 +1,4 @@
-# Phone Book App
+# Phone Book App 2
 
 The **Phone Book App** is a simple fullstack application that emulates a digital phone book. Built with **React.js**, **Node.js**, and **TypeScript**, this app allows you to manage a list of contacts in a user-friendly way.
 

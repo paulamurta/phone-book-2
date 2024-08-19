@@ -30,6 +30,7 @@ export function NewContact({
   isNewContactOpen,
   closeNewContact,
 }: NewContactModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -101,16 +102,20 @@ export function NewContact({
     await createContact(formData)
       .then(async () => {
         toast.success("Contact created successfully!");
+        handleCloseModal();
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
     await onSaveFields();
-    handleCloseModal();
   }
 
   return (
@@ -219,7 +224,8 @@ export function NewContact({
               <ButtonConfirm
                 label={"Save"}
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || isLoading}
+                isLoading={isLoading}
                 width="15vw"
               />
               <ButtonCancel

@@ -36,6 +36,7 @@ export function EditContact({
   setKeyId,
   closeEditContact,
 }: EditContactModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -57,15 +58,16 @@ export function EditContact({
     },
     {
       onSuccess: (dataOnSuccess) => {
+        console.log("dataOnSuccess: ", dataOnSuccess);
         setFirstName(dataOnSuccess?.data.firstName);
         setLastName(dataOnSuccess?.data.lastName);
         setEmail(dataOnSuccess?.data.email);
         setPhone(dataOnSuccess?.data.phoneNumber);
         setBirthday(dataOnSuccess?.data.birthday);
-        if (dataOnSuccess?.data.groupId) {
+        if (dataOnSuccess?.data.group) {
           setGroup({
-            id: dataOnSuccess?.data.groupId,
-            value: dataOnSuccess?.data.name,
+            id: dataOnSuccess?.data.group.id,
+            value: dataOnSuccess?.data.group.name,
           });
         }
 
@@ -91,10 +93,6 @@ export function EditContact({
       enabled: !!keyId,
     },
   );
-
-  // useEffect(() => {
-  //   console.log(" photo => " + photo);
-  // }, []);
 
   const isThereANewFirstName = firstName !== data?.data.firstName;
   const isThereANewLastName = lastName !== data?.data.lastName;
@@ -161,23 +159,27 @@ export function EditContact({
       );
     }
 
-    if (!!photo) {
+    if (photo) {
       formData.append("photo", photo);
     }
 
     await editContact(keyId, formData)
       .then(async () => {
         toast.success("Contact updated successfully!");
+        handleCloseModal();
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
     await onSaveFields();
-    handleCloseModal();
   }
 
   return (
@@ -286,8 +288,9 @@ export function EditContact({
               <ButtonConfirm
                 label={"Save"}
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || isLoading}
                 width="15vw"
+                isLoading={isLoading}
               />
               <ButtonCancel
                 label={"Cancel"}

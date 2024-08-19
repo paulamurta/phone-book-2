@@ -104,7 +104,7 @@ export function AddPhoto({
       />
 
       {file && (
-        <CustomTooltip title={"Excluir foto"} placement="right-end">
+        <CustomTooltip title={"Delete image"} placement="right-end">
           <ImgButton onClick={deletePhoto}>
             <ImgGlass />
             {typeof file === "string" ? (

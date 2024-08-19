@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { AppError, handleError } from "../common/app.Error";
 import { JwtTokenPayload } from "../common/app.type";
 import {
+  IContact,
   IContactCreate,
   IContactPhotoCreate,
   IContactUpdate,
@@ -146,7 +147,9 @@ export const updateContactController = async (req: Request, res: Response) => {
       };
     }
 
-    await updateContactService(id, rawBodyData, photo, tokenPayload.sub);
+    const validated = await updateContactSerializer.validate(rawBodyData);
+
+    await updateContactService(id, validated, photo, tokenPayload.sub);
     return res.status(204).send({ message: "Contact successfully updated" });
   } catch (err) {
     if (err instanceof AppError) {

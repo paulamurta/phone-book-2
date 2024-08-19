@@ -8,24 +8,24 @@ import {
 
 const phoneRegExp = /^[0-9]{10,10}$/;
 
-export const createContactSerializer = yup.object<IContactCreate>().shape({
+export const createContactSerializer = yup.object().shape({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   phoneNumber: yup
     .string()
     .required()
-    .matches(phoneRegExp, "Phone number is not valid"),
-  email: yup.string().optional().email(),
+    .matches(/^[0-9]{10,10}$/, "Phone number is not valid"),
+  email: yup.string().email().optional(),
   birthday: yup.date().optional(),
   groupId: yup.string().uuid().optional(),
 });
 
-export const updateContactSerializer = yup.object<IContactUpdate>().shape({
+export const updateContactSerializer = yup.object().shape({
   firstName: yup.string().optional(),
   lastName: yup.string().optional(),
   phoneNumber: yup
     .string()
-    .matches(phoneRegExp, "Phone number is not valid")
+    .matches(/^[0-9]{10,10}$/, "Phone number is not valid")
     .optional(),
   email: yup.string().email().optional(),
   favorite: yup.boolean().optional(),

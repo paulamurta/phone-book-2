@@ -54,7 +54,7 @@ docker compose up --build
 ```
 npm install
 ```
-Frontend runs at port 3000. For frontend:
+Frontend runs at port 3001. For frontend:
 ```
 npm run start
 ```

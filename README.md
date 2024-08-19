@@ -67,4 +67,4 @@ Please note that there will be a already setup user for login:
   "password": "iknownothing"
 }
 
-Enjoy it! If you like it, let me know! :slight_smile:
+Enjoy it! If you like it, let me know! :)

@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   createGroupController,
   deleteGroupController,
+  getGroupController,
   listGroupsController,
   updateGroupController,
 } from "../controllers/group.controller";
@@ -23,5 +24,6 @@ router.patch(
   updateGroupController
 );
 router.delete("/groups/:id", deleteGroupController);
+router.get("/groups/:id", getGroupController);
 
 export default router;

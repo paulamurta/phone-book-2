@@ -5,6 +5,7 @@ import { JwtTokenPayload } from "../common/app.type";
 import {
   createGroupService,
   deleteGroupService,
+  getGroupService,
   listGroupsService,
   updateGroupService,
 } from "../services/group.service";
@@ -69,6 +70,23 @@ export const deleteGroupController = async (req: Request, res: Response) => {
 
     await deleteGroupService(id, tokenPayload.sub);
     return res.status(200).send();
+  } catch (err) {
+    if (err instanceof AppError) {
+      handleError(err, res);
+    }
+  }
+};
+
+export const getGroupController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const authHeader = req.header("Authorization") ?? "";
+    const tokenPayload = jwtService.decodeTokenFromHeader(
+      authHeader
+    ) as JwtTokenPayload;
+
+    const group = await getGroupService(id, tokenPayload.sub);
+    return res.status(200).send(group);
   } catch (err) {
     if (err instanceof AppError) {
       handleError(err, res);

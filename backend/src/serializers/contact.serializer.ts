@@ -11,10 +11,13 @@ const phoneRegExp = /^[0-9]{10,10}$/;
 export const createContactSerializer = yup.object<IContactCreate>().shape({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
-  phoneNumber: yup.string().required(),
-  // .matches(phoneRegExp, "Phone number is not valid"),
+  phoneNumber: yup
+    .string()
+    .required()
+    .matches(phoneRegExp, "Phone number is not valid"),
   email: yup.string().optional().email(),
   birthday: yup.date().optional(),
+  groupId: yup.string().uuid().optional(),
 });
 
 export const updateContactSerializer = yup.object<IContactUpdate>().shape({

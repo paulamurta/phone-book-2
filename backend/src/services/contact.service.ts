@@ -68,9 +68,12 @@ export const deleteContactService = async (id: string, ownerId: string) => {
 export const updateContactService = async (
   id: string,
   contact: IContactUpdate,
+  photo: IContactPhotoCreate | undefined | null,
   ownerId: string
 ) => {
-  const doHaveChanges = Object.values(contact).some((value) => !!value);
+  const doHaveChanges = Object.values(contact).some(
+    (value) => value !== null && value !== undefined && value !== ""
+  );
 
   if (!doHaveChanges) {
     throw new AppError(422, "At least one field must be filled for update");
@@ -80,6 +83,7 @@ export const updateContactService = async (
     const updatedContact = await contactRepository.patchContact(
       id,
       contact,
+      photo,
       ownerId
     );
     return updatedContact;

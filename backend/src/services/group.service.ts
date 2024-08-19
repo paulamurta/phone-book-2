@@ -56,3 +56,18 @@ export const deleteGroupService = async (id: string, userId: string) => {
     throw new AppError(400, (err as Error)?.message);
   }
 };
+
+export const getGroupService = async (id: string, userId: string) => {
+  try {
+    const foundGroup = await groupRepository.findOne(id, userId);
+    return foundGroup;
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === "P2025") {
+        throw new AppError(404, "Group not found");
+      }
+      throw new AppError(400, `${err.code}: ${err.message}`);
+    }
+    throw new AppError(400, (err as Error)?.message);
+  }
+};

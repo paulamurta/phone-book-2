@@ -10,7 +10,7 @@ export interface IContact {
   email: string | null;
   ownerId: string;
   groupId: string | null;
-  photo?: IContactPhoto;
+  photo?: Pick<IContactPhoto, "mimeType" | "photoData"> | null;
 }
 
 export interface IContactPhotoCreate {
@@ -31,6 +31,7 @@ export interface IContactCreate {
   phoneNumber: string;
   email?: string;
   birthday?: Date;
+  groupId?: string;
 }
 
 export interface IContactUpdate {

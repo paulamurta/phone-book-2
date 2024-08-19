@@ -6,6 +6,7 @@ import { IContactCreate, IContactPhotoCreate } from "../interfaces/contact";
 import {
   contactSearchSerializer,
   createContactSerializer,
+  updateContactSerializer,
 } from "../serializers/contact.serializer";
 import {
   createContactService,
@@ -29,6 +30,7 @@ export const createContactController = async (req: Request, res: Response) => {
       phoneNumber: req.body.phoneNumber,
       birthday: req.body.birthday || undefined,
       email: req.body.email || undefined,
+      groupId: req.body.groupId ?? undefined,
     };
 
     let photo: IContactPhotoCreate | undefined;
@@ -120,7 +122,19 @@ export const updateContactController = async (req: Request, res: Response) => {
       authHeader
     ) as JwtTokenPayload;
 
-    await updateContactService(id, req.body, tokenPayload.sub);
+    const validated = await updateContactSerializer.validate(req.body);
+
+    let photo: IContactPhotoCreate | undefined | null;
+    if (req.file === null) {
+      photo = null;
+    } else if (req.file) {
+      photo = {
+        mimeType: req.file?.mimetype,
+        photoData: req.file?.buffer,
+      };
+    }
+
+    await updateContactService(id, validated, photo, tokenPayload.sub);
     return res.status(204).send({ message: "Contact successfully updated" });
   } catch (err) {
     if (err instanceof AppError) {

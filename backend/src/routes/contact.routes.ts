@@ -29,7 +29,7 @@ router.get("/contacts/:id", getContactByIdController);
 router.delete("/contacts/:id", deleteContactsController);
 router.patch(
   "/contacts/:id",
-  validateSerializerMiddleware(updateContactSerializer),
+  uploadMiddleware.single("photo"),
   updateContactController
 );
 

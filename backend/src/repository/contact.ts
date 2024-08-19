@@ -45,11 +45,14 @@ class ContactRepository {
     return newContact as unknown as IContact;
   }
 
-  async getAll(ownerId: string, search: IContactSearch): Promise<IContact[]> {
+  async getAll(
+    ownerId: string,
+    searchQuery: IContactSearch
+  ): Promise<IContact[]> {
     let nameWhereClause: Prisma.ContactWhereInput | undefined;
-
-    if (search.search) {
-      const nameParts = search.search
+    const { search, ...others } = searchQuery;
+    if (search) {
+      const nameParts = search
         .split(" ")
         .map((item) => item.trim())
         .filter((value) => !!value);
@@ -57,16 +60,16 @@ class ContactRepository {
       if (nameParts.length === 1) {
         nameWhereClause = {
           OR: [
-            { firstName: { contains: nameParts[0] } },
-            { lastName: { contains: nameParts[0] } },
+            { firstName: { contains: nameParts[0], mode: "insensitive" } },
+            { lastName: { contains: nameParts[0], mode: "insensitive" } },
           ],
         };
       } else if (nameParts.length > 1) {
         nameWhereClause = {
           AND: nameParts.map((part) => ({
             OR: [
-              { firstName: { contains: part } },
-              { lastName: { contains: part } },
+              { firstName: { contains: part, mode: "insensitive" } },
+              { lastName: { contains: part, mode: "insensitive" } },
             ],
           })),
         };
@@ -74,16 +77,28 @@ class ContactRepository {
     }
 
     const whereClause: Prisma.ContactWhereInput = {
-      ...search,
-      ...nameWhereClause,
+      ...others,
       ownerId,
+      ...nameWhereClause,
     };
 
-    //await this.prisma.$connect();
-
     const contactsList = await this.prisma.contact.findMany({
-      where: { ...whereClause },
+      where: whereClause,
       orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
+      include: {
+        group: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        photo: {
+          select: {
+            photoData: true,
+            mimeType: true,
+          },
+        },
+      },
     });
 
     return contactsList;
@@ -120,12 +135,33 @@ class ContactRepository {
   async patchContact(
     id: string,
     data: IContactUpdate,
+    photo: IContactPhotoCreate | undefined | null,
     ownerId: string
   ): Promise<IContact> {
-    const updatedContact = await this.prisma.contact.update({
-      where: { id, ownerId },
-      data: data,
-    });
+    const updatedContact = await this.prisma.$transaction(
+      async (transaction) => {
+        if (photo === null) {
+          transaction.contactPhoto.delete({ where: { contactId: id } });
+        } else if (photo) {
+          this.prisma.contactPhoto.update({
+            where: {
+              contactId: id,
+            },
+            data: {
+              photoData: photo.photoData,
+              mimeType: photo.mimeType,
+            },
+          });
+        }
+
+        const updatedContact = await transaction.contact.update({
+          where: { id, ownerId },
+          data: { ...data },
+        });
+
+        return updatedContact;
+      }
+    );
 
     return updatedContact as IContact;
   }

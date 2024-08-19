@@ -210,7 +210,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/ContactUpdate"
       responses:
@@ -333,6 +333,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
   /api/groups/{groupId}:
+    get:
+      summary: Get data of a group
+      tags:
+        - Group
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "403":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     patch:
       summary: Patches changes in a group
       tags:
@@ -526,6 +562,9 @@ components:
         birthday:
           type: string
           format: date
+        groupId:
+          type: string
+          format: uuid
         photo:
           type: string
           format: binary

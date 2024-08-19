@@ -1,7 +1,12 @@
 import toast from "react-hot-toast";
 import { useState, FormEvent } from "react";
 import { NewContactModalProps } from "./types";
-import { ButtonsBox, ContainerColumn, FormModal } from "../../../styles/global";
+import {
+  ButtonsBox,
+  ContainerColumn,
+  ContainerRow,
+  FormModal,
+} from "../../../styles/global";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
 import { Header4, LabelText } from "../../../styles/typography";
 import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
@@ -12,6 +17,10 @@ import { DefaultModal } from "../../../components/Modal/DefaultModal";
 import { WrapperModal } from "../../../styles/common/Modal/styles";
 import { createContact } from "../../../services/contacts.service";
 import DateRangePicker from "../../../components/DateRangePicker";
+import {
+  formatFromFormToPayload,
+  formatToSlashStyle,
+} from "../../../common/utils/format/formatDate";
 
 export function NewContact({
   isNewContactOpen,
@@ -23,6 +32,10 @@ export function NewContact({
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [birthday, setBirthday] = useState<Date | null>(null);
+  // const [acceptedFileSize, setAcceptedFileSize] = useState(true);
+  // const [acceptedFileType, setAcceptedFileType] = useState(true);
+  // const [photo, setPhoto] = useState<File | string>("");
+  // const [photoPath, setPhotoPath] = useState<string>("");
 
   const isFormValid = firstName && lastName && phone.length === 10;
 
@@ -34,6 +47,8 @@ export function NewContact({
     setFirstName("");
     setLastName("");
     setPhone("");
+    setEmail("");
+    setBirthday(null);
     closeNewContact();
     setIsModalConfirmOpen(false);
   }
@@ -43,15 +58,28 @@ export function NewContact({
   }
 
   async function onSaveFields() {
-    const payload = {
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-    };
+    const formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("phoneNumber", phone);
 
-    await createContact(payload)
+    if (email) {
+      formData.append("email", email);
+    }
+
+    if (birthday) {
+      formData.append(
+        "birthday",
+        formatFromFormToPayload(formatToSlashStyle(birthday)),
+      );
+    }
+    // if (photo) {
+    //   formData.append("file", photo);
+    // }
+
+    await createContact(formData)
       .then(async () => {
-        toast.success("User created successfully!");
+        toast.success("Contact created successfully!");
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
@@ -82,35 +110,26 @@ export function NewContact({
         <WrapperModal>
           <Header4>Register Contact</Header4>
           <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
-            <DefaultInput
-              key="first-name"
-              label={"First Name*"}
-              value={firstName}
-              placeholder={"Barbara"}
-              onChange={(value) => {
-                setFirstName(value);
-              }}
-            />
-            <DefaultInput
-              key="last-name"
-              label={"Last Name*"}
-              placeholder={"Smith"}
-              value={lastName}
-              onChange={(value) => {
-                setLastName(value);
-              }}
-            />
-            <MaskInput
-              mask="999-999-9999"
-              key="phone"
-              value={phone}
-              label={"Phone Number*"}
-              placeholder={"000-000-0000"}
-              message={"Phone Number must be exactly a 10-digit number"}
-              onChange={(value) => {
-                setPhone(value.replace(/-/g, ""));
-              }}
-            />
+            <ContainerRow>
+              <DefaultInput
+                key="first-name"
+                label={"First Name*"}
+                value={firstName}
+                placeholder={"Barbara"}
+                onChange={(value) => {
+                  setFirstName(value);
+                }}
+              />
+              <DefaultInput
+                key="last-name"
+                label={"Last Name*"}
+                placeholder={"Smith"}
+                value={lastName}
+                onChange={(value) => {
+                  setLastName(value);
+                }}
+              />
+            </ContainerRow>
             <DefaultInput
               width="100%"
               key="E-mail"
@@ -121,14 +140,27 @@ export function NewContact({
                 setEmail(value);
               }}
             />
-            <ContainerColumn>
-              <LabelText>Birthday</LabelText>
-              <DateRangePicker
-                isSingleDate
-                singleDate={birthday}
-                setSingleDate={setBirthday}
+            <ContainerRow>
+              <MaskInput
+                mask="999-999-9999"
+                key="phone"
+                value={phone}
+                label={"Phone Number*"}
+                placeholder={"000-000-0000"}
+                message={"Phone Number must be exactly a 10-digit number"}
+                onChange={(value) => {
+                  setPhone(value.replace(/-/g, ""));
+                }}
               />
-            </ContainerColumn>
+              <ContainerColumn $width="auto" $position="top">
+                <LabelText>Birthday</LabelText>
+                <DateRangePicker
+                  isSingleDate
+                  singleDate={birthday}
+                  setSingleDate={setBirthday}
+                />
+              </ContainerColumn>
+            </ContainerRow>
 
             <ButtonsBox>
               <ButtonConfirm

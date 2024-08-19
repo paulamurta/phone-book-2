@@ -120,7 +120,7 @@ export const ContainerColumn = styled.div<IContainer>`
   flex-direction: column;
   align-items: flex-start;
   height: 100%;
-  width: 100%;
+  width: ${({ $width }) => ($width ? $width : "100%")};
   gap: 1vh;
   ${(props) =>
     props.$position === "top"

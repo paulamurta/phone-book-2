@@ -12,10 +12,14 @@ export type CardProps = {
   lastName: string;
   setLastName: Dispatch<SetStateAction<string>>;
   phone: string;
+  email?: string;
+  birthday: string | null;
+  photo?: string | File | null;
+  groupName?: string;
   modalEditContact: boolean;
   setModalEditContact: Dispatch<SetStateAction<boolean>>;
   modalDeleteContact: boolean;
   setModalDeleteContact: Dispatch<SetStateAction<boolean>>;
-  favorite?: boolean;
-  setFavorite?: Dispatch<SetStateAction<boolean>>;
+  favorite: boolean;
+  refetch: any;
 };

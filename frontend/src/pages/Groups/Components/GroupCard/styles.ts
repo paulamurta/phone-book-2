@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-interface ITabBtn {
-  $position: string;
-  $selected: boolean;
-}
-
 export const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,10 +21,4 @@ export const CardWrapper = styled.div`
   border: 1.5px solid ${({ theme }) => theme.colors.border.main};
   background-color: ${({ theme }) => theme.colors.background.mediumGray};
   cursor: pointer;
-
-  &:hover {
-    p {
-      font-family: "Inter 600";
-    }
-  }
 `;

@@ -12,11 +12,12 @@ export const Wrapper = styled.div<IBox>`
   background-color: transparent;
   border-radius: 10vh;
   z-index: 10;
-  border: 0.25vh solid
+  border: 1.5px solid
     ${({ $disabled, theme }) =>
-      $disabled ? theme.colors.input.disabled : theme.colors.calendar.border};
+      $disabled ? theme.colors.input.disabled : theme.colors.border.main};
   padding: 0 1vw;
-  height: 100%;
+  height: 5vh;
+
   width: fit-content;
 
   &:hover {
@@ -91,7 +92,6 @@ export const Wrapper = styled.div<IBox>`
 
   .react-datepicker__year-read-view {
     display: flex;
-    /* height: 1vh; */
     margin-top: 2vh;
     color: ${({ theme }) => theme.colors.calendar.month};
     margin-bottom: 1vh;
@@ -113,7 +113,7 @@ export const Wrapper = styled.div<IBox>`
     margin: 0.15vh;
     padding: 0.3vh 0;
 
-    font-family: "Inter Regular", sans-serif;
+    font-family: "Inter 400", sans-serif;
 
     &:hover {
       background-color: ${({ theme }) => theme.colors.calendar.daysHover};

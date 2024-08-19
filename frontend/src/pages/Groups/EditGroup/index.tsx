@@ -1,18 +1,37 @@
 import { FormEvent, useState } from "react";
 import { DefaultModal } from "../../../components/Modal/DefaultModal";
-import { NewGroupProps } from "./types";
+import { EditGroupProps } from "./types";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
 import { Header4 } from "../../../styles/typography";
 import { ButtonsBox, FormModal } from "../../../styles/global";
 import toast from "react-hot-toast";
-import { createGroup } from "../../../services/groups.service";
+import { editGroup, getGroupById } from "../../../services/groups.service";
 import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
 import { ButtonCancel } from "../../../components/Button/ButtonCancel";
+import { useQuery } from "react-query";
 
-export function NewGroup({ isNewGroupOpen, closeNewGroup }: NewGroupProps) {
+export function EditGroup({
+  isEditGroupOpen,
+  closeEditGroup,
+  keyId,
+}: EditGroupProps) {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>("");
+
+  useQuery(
+    ["keyId", keyId],
+
+    () => {
+      return getGroupById(keyId);
+    },
+    {
+      onSuccess: (dataOnSuccess) => {
+        setGroupName(dataOnSuccess?.data.name);
+      },
+      enabled: !!keyId,
+    },
+  );
 
   function onTryToClose() {
     setIsModalConfirmOpen(true);
@@ -20,7 +39,7 @@ export function NewGroup({ isNewGroupOpen, closeNewGroup }: NewGroupProps) {
 
   function handleCloseModal() {
     setGroupName("");
-    closeNewGroup();
+    closeEditGroup();
     setIsModalConfirmOpen(false);
   }
 
@@ -29,7 +48,7 @@ export function NewGroup({ isNewGroupOpen, closeNewGroup }: NewGroupProps) {
       name: groupName,
     };
 
-    await createGroup(payload)
+    await editGroup(keyId, payload)
       .then(async () => {
         toast.success("Group created successfully!");
       })
@@ -53,13 +72,13 @@ export function NewGroup({ isNewGroupOpen, closeNewGroup }: NewGroupProps) {
           setIsModalConfirmOpen(false);
         }}
         handleClose={handleCloseModal}
-        title="Cancel Create group?"
-        message="You are leaving Create group."
+        title="Cancel Edit group?"
+        message="You are leaving Edit group."
       />
-      <DefaultModal isOpen={isNewGroupOpen} onClose={onTryToClose} closeButton>
+      <DefaultModal isOpen={isEditGroupOpen} onClose={onTryToClose} closeButton>
         <>
           <Header4 $align={"start"} $bold>
-            Create group
+            Edit group
           </Header4>
           <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
             <DefaultInput

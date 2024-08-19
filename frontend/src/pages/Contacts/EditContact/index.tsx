@@ -1,8 +1,13 @@
 import toast from "react-hot-toast";
 import { useState, FormEvent } from "react";
-import { ButtonsBox, FormModal } from "../../../styles/global";
+import {
+  ButtonsBox,
+  ContainerColumn,
+  ContainerRow,
+  FormModal,
+} from "../../../styles/global";
 import { ModalConfirm } from "../../../components/Modal/ModalConfirm";
-import { Header4 } from "../../../styles/typography";
+import { Header4, LabelText } from "../../../styles/typography";
 import { ButtonConfirm } from "../../../components/Button/ButtonConfirm";
 import { DefaultInput } from "../../../components/Input/DefaultInput";
 import { MaskInput } from "../../../components/Input/Mask";
@@ -15,6 +20,11 @@ import {
   editContact,
   getContactById,
 } from "../../../services/contacts.service";
+import {
+  formatFromFormToPayload,
+  formatToSlashStyle,
+} from "../../../common/utils/format/formatDate";
+import DateRangePicker from "../../../components/DateRangePicker";
 
 export function EditContact({
   isEditContactOpen,
@@ -24,11 +34,12 @@ export function EditContact({
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [birthday, setBirthday] = useState<Date | null>(null);
 
   const { data } = useQuery(
     ["keyId", keyId],
-
     () => {
       return getContactById(keyId);
     },
@@ -36,7 +47,9 @@ export function EditContact({
       onSuccess: (dataOnSuccess) => {
         setFirstName(dataOnSuccess?.data.firstName);
         setLastName(dataOnSuccess?.data.lastName);
-        setPhone(dataOnSuccess?.data.phone);
+        setEmail(dataOnSuccess?.data.email);
+        setPhone(dataOnSuccess?.data.phoneNumber);
+        setBirthday(dataOnSuccess?.data.birthday);
       },
       enabled: !!keyId,
     },
@@ -44,12 +57,16 @@ export function EditContact({
 
   const isThereANewFirstName = firstName !== data?.data.firstName;
   const isThereANewLastName = lastName !== data?.data.lastName;
-  const isThereANewPhone = phone !== data?.data.phone;
+  const isThereANewPhone = phone !== data?.data.phoneNumber;
+  const isThereANewEmail = email !== data?.data.email;
+  const isThereANewBirthday = birthday !== data?.data.birthday;
 
   const isFormValid =
     isThereANewFirstName ||
     isThereANewLastName ||
-    (isThereANewPhone && phone.length === 10);
+    (isThereANewPhone && phone.length === 10) ||
+    isThereANewEmail ||
+    isThereANewBirthday;
 
   function handleCancelModal() {
     setIsModalConfirmOpen(false);
@@ -59,6 +76,8 @@ export function EditContact({
     setFirstName("");
     setLastName("");
     setPhone("");
+    setEmail("");
+    setBirthday(null);
     closeEditContact();
     setIsModalConfirmOpen(false);
   }
@@ -68,15 +87,25 @@ export function EditContact({
   }
 
   async function onSaveFields() {
-    const payload = {
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-    };
+    const formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("phoneNumber", phone);
 
-    await editContact(keyId, payload)
+    if (email) {
+      formData.append("email", email);
+    }
+
+    if (birthday) {
+      formData.append(
+        "birthday",
+        formatFromFormToPayload(formatToSlashStyle(birthday)),
+      );
+    }
+
+    await editContact(keyId, formData)
       .then(async () => {
-        toast.success("User updated successfully!");
+        toast.success("Contact updated successfully!");
       })
       .catch((error) => {
         toast.error(error.response?.data?.message);
@@ -107,35 +136,57 @@ export function EditContact({
         <WrapperModal>
           <Header4>Edit Contact</Header4>
           <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
+            <ContainerRow>
+              <DefaultInput
+                key="first-name"
+                label={"First Name*"}
+                value={firstName}
+                placeholder={"Barbara"}
+                onChange={(value) => {
+                  setFirstName(value);
+                }}
+              />
+              <DefaultInput
+                key="last-name"
+                label={"Last Name*"}
+                placeholder={"Smith"}
+                value={lastName}
+                onChange={(value) => {
+                  setLastName(value);
+                }}
+              />
+            </ContainerRow>
             <DefaultInput
-              key="first-name"
-              label={"First Name*"}
-              placeholder={"Barbara"}
-              value={firstName}
+              width="100%"
+              key="E-mail"
+              label={"E-mail"}
+              value={email}
+              placeholder={"mail@website.com"}
               onChange={(value) => {
-                setFirstName(value);
+                setEmail(value);
               }}
             />
-            <DefaultInput
-              key="last-name"
-              label={"Last Name*"}
-              placeholder={"Smith"}
-              value={lastName}
-              onChange={(value) => {
-                setLastName(value);
-              }}
-            />
-            <MaskInput
-              mask="999-999-9999"
-              key="phone"
-              value={phone}
-              label={"Phone Number*"}
-              placeholder={"000-000-0000"}
-              message={"Phone Number must be exactly a 10-digit number"}
-              onChange={(value: any) => {
-                setPhone(value.replace(/-/g, ""));
-              }}
-            />
+            <ContainerRow>
+              <MaskInput
+                mask="999-999-9999"
+                key="phone"
+                value={phone}
+                label={"Phone Number*"}
+                placeholder={"000-000-0000"}
+                message={"Phone Number must be exactly a 10-digit number"}
+                onChange={(value) => {
+                  setPhone(value.replace(/-/g, ""));
+                }}
+              />
+              <ContainerColumn $width="auto" $position="top">
+                <LabelText>Birthday</LabelText>
+                <DateRangePicker
+                  isSingleDate
+                  singleDate={birthday}
+                  setSingleDate={setBirthday}
+                />
+              </ContainerColumn>
+            </ContainerRow>
 
             <ButtonsBox>
               <ButtonConfirm

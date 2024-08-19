@@ -8,7 +8,13 @@ import {
   Trash as DeleteIcon,
 } from "@phosphor-icons/react";
 
-export function GroupCard({ name, id }: GroupCardProps) {
+export function GroupCard({
+  name,
+  id,
+  setId,
+  setIsEditGroupOpen,
+  setIsDeleteGroupOpen,
+}: GroupCardProps) {
   return (
     <CardWrapper>
       <Body2>{name}</Body2>
@@ -17,8 +23,8 @@ export function GroupCard({ name, id }: GroupCardProps) {
           <ActionButon
             action="edit"
             onClick={() => {
-              // setModalEditContact(!modalEditContact);
-              // setId(id);
+              setIsEditGroupOpen(true);
+              setId(id);
             }}
           >
             <EditIcon />
@@ -28,10 +34,8 @@ export function GroupCard({ name, id }: GroupCardProps) {
           <ActionButon
             action="delete"
             onClick={() => {
-              // setModalDeleteContact(!modalDeleteContact);
-              // setId(id);
-              // setFirstName(firstName);
-              // setLastName(lastName);
+              setIsDeleteGroupOpen(true);
+              setId(id);
             }}
           >
             <DeleteIcon />

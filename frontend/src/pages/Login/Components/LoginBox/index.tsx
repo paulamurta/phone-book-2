@@ -7,8 +7,9 @@ import { useState } from "react";
 import { Body2, Header3 } from "../../../../styles/typography";
 import { useAuthGlobal } from "../../../../contexts/AuthContext/useAuthGlobal";
 import { CommonButton } from "../../../../components/Button/CommonButton";
+import { LoginBoxProps } from "./types";
 
-export default function LoginBox({ setIsLoginShown }: any) {
+export default function LoginBox({ setIsLoginShown }: LoginBoxProps) {
   const { colors: theme } = useTheme();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

@@ -1,5 +1,12 @@
+import { useState } from "react";
+import { Select } from "../Select";
+import { FilterProps } from "./types";
+import { Popover } from "@mui/material";
 import { useTheme } from "styled-components";
+import { Body3 } from "../../styles/typography";
+import { ISelectCurrentValue } from "../Select/types";
 import { Funnel, Eraser } from "@phosphor-icons/react";
+import { useFetchGroups } from "../../hooks/useFetchGroups";
 import {
   Container,
   FilterBtn,
@@ -7,12 +14,6 @@ import {
   Row,
   ConfirmButton,
 } from "./styles";
-import { useState } from "react";
-import { FilterProps } from "./types";
-import { Popover } from "@mui/material";
-import { Body3 } from "../../styles/typography";
-import { ISelectCurrentValue } from "../Select/types";
-import { Select } from "../Select";
 
 export function Filter({
   setGroup,
@@ -28,26 +29,7 @@ export function Filter({
   const [localGroup, setLocalGroup] = useState<ISelectCurrentValue | null>(
     null,
   );
-  // const { groupList } = useFetchPlants();
-
-  const groupList = [
-    {
-      id: 1,
-      value: "Work",
-    },
-    {
-      id: 2,
-      value: "School",
-    },
-    {
-      id: 3,
-      value: "Gym",
-    },
-    {
-      id: 4,
-      value: "Church",
-    },
-  ];
+  const { groups } = useFetchGroups();
 
   function setCounter() {
     const isLotSelected = localGroup?.id ? 1 : 0;
@@ -115,7 +97,7 @@ export function Filter({
             id="group"
             placeholder="None"
             key={"group"}
-            values={groupList}
+            values={groups}
             onChangeValue={(groupObject: ISelectCurrentValue | null) =>
               setLocalGroup(groupObject)
             }

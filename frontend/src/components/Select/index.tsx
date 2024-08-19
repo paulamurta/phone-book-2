@@ -54,7 +54,7 @@ export function Select({
         </LoadingBox>
       }
       open={open}
-      noOptionsText="Sem resultados"
+      noOptionsText="No options"
       onOpen={() => {
         setOpen(true);
       }}

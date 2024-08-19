@@ -23,10 +23,7 @@ import { Tabs } from "../../components/Tabs";
 import { NewContact } from "./NewContact";
 import { EditContact } from "./EditContact";
 import { DeleteContact } from "./DeleteContact";
-import {
-  getAllContacts,
-  getAllContactsSearch,
-} from "../../services/contacts.service";
+import { getAllContacts } from "../../services/contacts.service";
 import { Filter } from "../../components/Filter";
 import { ISelectCurrentValue } from "../../components/Select/types";
 import { ManageGroups } from "../Groups";
@@ -45,21 +42,16 @@ function Contacts() {
   const [id, setId] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
-  const [favorites, setFavorites] = useState<boolean>(false);
+  const [isFavoriteTabOn, setIsFavoriteTabOn] = useState<boolean>(false);
   const [group, setGroup] = useState<ISelectCurrentValue | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { logout, name, email } = useAuthGlobal();
 
   const { refetch } = useQuery(
-    ["contacts", searchParam, group],
+    ["contacts", searchParam, group, isFavoriteTabOn],
     () => {
-      if (searchParam.length === 0) {
-        return getAllContacts();
-      }
-      if (searchParam.length > 0) {
-        return getAllContactsSearch(searchParam);
-      }
+      return getAllContacts(searchParam, isFavoriteTabOn, group?.id);
     },
     {
       onSuccess: (dataOnSuccess) => {
@@ -168,7 +160,10 @@ function Contacts() {
             </ContainerRow>
             <ContainerRow>
               <ContainerRow $width={"auto"}>
-                <Tabs favorites={favorites} setFavorites={setFavorites} />
+                <Tabs
+                  favorites={isFavoriteTabOn}
+                  setFavorites={setIsFavoriteTabOn}
+                />
                 <Filter
                   setGroup={setGroup}
                   width="17vw"
@@ -198,19 +193,23 @@ function Contacts() {
               {contacts.map((contact) => (
                 <Card
                   key={contact.id}
+                  id={contact.id}
+                  setId={setId}
                   firstName={contact.firstName}
                   lastName={contact.lastName}
-                  phone={contact.phone}
+                  phone={contact.phoneNumber}
+                  email={contact.email}
+                  favorite={contact.favorite}
+                  birthday={contact?.birthday || null}
+                  // groupName={contact?.groupId}
+                  photo={contact?.photo || null}
                   setModalEditContact={setIsEditContactOpen}
                   modalEditContact={isEditContactOpen}
                   setModalDeleteContact={setIsDeleteContactOpen}
                   modalDeleteContact={isDeleteContactOpen}
-                  setId={setId}
                   setFirstName={setFirstName}
                   setLastName={setLastName}
-                  id={contact.id}
-                  favorite={false}
-                  setFavorite={() => {}}
+                  refetch={refetch}
                 />
               ))}
             </List>

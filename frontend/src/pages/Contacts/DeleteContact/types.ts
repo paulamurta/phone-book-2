@@ -1,4 +1,4 @@
-export type ModalDeleteProps = {
+export type DeleteContactProps = {
   isDeleteContactOpen: boolean;
   closeDeleteContact: () => void;
   keyId?: string;

@@ -23,7 +23,7 @@ export const Box = styled(motion.div)`
 
     p {
       color: ${theme.colors.toast.error.text};
-      font-family: "Inter Regular", sans-serif;
+      font-family: "Inter 400", sans-serif;
       font-size: 0.85vw;
     }
 

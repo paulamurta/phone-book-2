@@ -14,7 +14,7 @@ export type CardProps = {
   phone: string;
   email?: string;
   birthday: string | null;
-  photo?: string | File | null;
+  photo?: string | null;
   groupName?: string;
   modalEditContact: boolean;
   setModalEditContact: Dispatch<SetStateAction<boolean>>;

@@ -13,6 +13,9 @@ import {
   FavoriteButton,
   NameAndGroupContainer,
   DataContainer,
+  UserPhotoBox,
+  LeftWrapper,
+  UserPhoto,
 } from "./styles";
 import {
   PencilSimpleLine as EditIcon,
@@ -34,6 +37,7 @@ export function Card({
   setLastName,
   phone,
   email,
+  photo,
   // groupName,
   birthday,
   favorite,
@@ -67,49 +71,58 @@ export function Card({
 
   return (
     <Container>
-      <ContainerColumn>
-        <NameAndGroupContainer>
-          <ContainerRow $position="left">
-            <Body1>
-              {firstName} {lastName}
-            </Body1>
-            <CustomTooltip
-              title={
-                favorite
-                  ? "Remove contact from favorites"
-                  : "Set contact to favorite"
-              }
-              placement="bottom"
-            >
-              <FavoriteButton $favorite={favorite} onClick={handleFavorite}>
-                {favorite ? (
-                  <Heart weight="fill" />
-                ) : (
-                  <Heart weight="regular" />
-                )}
-              </FavoriteButton>
-            </CustomTooltip>
-          </ContainerRow>
-          <Body4 $bold $fontColor={theme.typography.darkGray}>
-            Group
-          </Body4>
-        </NameAndGroupContainer>
-        <ContainerRow $position="left">
-          <DataContainer>
-            <Phone weight="fill" />
-            <Body4 $fontColor={theme.typography.lightGray}>
-              {formattedPhone}
-            </Body4>
-          </DataContainer>
-          {email && (
-            <DataContainer>
-              <EnvelopeSimple weight="bold" />
-              <Body4 $fontColor={theme.typography.lightGray}>{email}</Body4>
-            </DataContainer>
+      <LeftWrapper>
+        <UserPhotoBox>
+          {!!photo ? (
+            <UserPhoto src={photo ?? undefined} />
+          ) : (
+            <p>{firstName?.split("")[0]}</p>
           )}
-        </ContainerRow>
-      </ContainerColumn>
-      <ContainerRow $position="right">
+        </UserPhotoBox>
+        <ContainerColumn $width="auto">
+          <NameAndGroupContainer>
+            <ContainerRow $position="left">
+              <Body1>
+                {firstName} {lastName}
+              </Body1>
+              <CustomTooltip
+                title={
+                  favorite
+                    ? "Remove contact from favorites"
+                    : "Set contact to favorite"
+                }
+                placement="bottom"
+              >
+                <FavoriteButton $favorite={favorite} onClick={handleFavorite}>
+                  {favorite ? (
+                    <Heart weight="fill" />
+                  ) : (
+                    <Heart weight="regular" />
+                  )}
+                </FavoriteButton>
+              </CustomTooltip>
+            </ContainerRow>
+            <Body4 $bold $fontColor={theme.typography.darkGray}>
+              Group
+            </Body4>
+          </NameAndGroupContainer>
+          <ContainerRow $position="left">
+            <DataContainer>
+              <Phone weight="fill" />
+              <Body4 $fontColor={theme.typography.lightGray}>
+                {formattedPhone}
+              </Body4>
+            </DataContainer>
+            {email && (
+              <DataContainer>
+                <EnvelopeSimple weight="bold" />
+                <Body4 $fontColor={theme.typography.lightGray}>{email}</Body4>
+              </DataContainer>
+            )}
+          </ContainerRow>
+        </ContainerColumn>
+      </LeftWrapper>
+      <ContainerRow $position="right" $width="fit-content">
         {isBirthdayToday && (
           <CustomTooltip
             title={`Today's ${firstName}'s birthday! `}

@@ -25,10 +25,12 @@ import {
   formatToSlashStyle,
 } from "../../../common/utils/format/formatDate";
 import DateRangePicker from "../../../components/DateRangePicker";
+import { AddPhoto } from "../../../components/AddPhoto";
 
 export function EditContact({
   isEditContactOpen,
   keyId,
+  setKeyId,
   closeEditContact,
 }: EditContactModalProps) {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
@@ -37,6 +39,11 @@ export function EditContact({
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [birthday, setBirthday] = useState<Date | null>(null);
+  const [photo, setPhoto] = useState<File | string>("");
+  const [photoPath, setPhotoPath] = useState<string>("");
+  const [hasImgChanged, setHasImgChanged] = useState<boolean>(false);
+  const [acceptedFileSize, setAcceptedFileSize] = useState(true);
+  const [acceptedFileType, setAcceptedFileType] = useState(true);
 
   const { data } = useQuery(
     ["keyId", keyId],
@@ -50,6 +57,7 @@ export function EditContact({
         setEmail(dataOnSuccess?.data.email);
         setPhone(dataOnSuccess?.data.phoneNumber);
         setBirthday(dataOnSuccess?.data.birthday);
+        setPhoto(dataOnSuccess?.data.photo);
       },
       enabled: !!keyId,
     },
@@ -60,23 +68,34 @@ export function EditContact({
   const isThereANewPhone = phone !== data?.data.phoneNumber;
   const isThereANewEmail = email !== data?.data.email;
   const isThereANewBirthday = birthday !== data?.data.birthday;
+  const firstPhoto = !data?.data.photo && !!photoPath;
+  const hadPhotoButDeleted = !!data?.data.photo && hasImgChanged;
 
   const isFormValid =
-    isThereANewFirstName ||
-    isThereANewLastName ||
-    (isThereANewPhone && phone.length === 10) ||
-    isThereANewEmail ||
-    isThereANewBirthday;
+    acceptedFileSize &&
+    acceptedFileType &&
+    (firstPhoto ||
+      hadPhotoButDeleted ||
+      isThereANewFirstName ||
+      isThereANewLastName ||
+      (isThereANewPhone && phone.length === 10) ||
+      isThereANewEmail ||
+      isThereANewBirthday);
 
   function handleCancelModal() {
     setIsModalConfirmOpen(false);
   }
 
   function handleCloseModal() {
+    setKeyId("");
     setFirstName("");
     setLastName("");
     setPhone("");
     setEmail("");
+    setPhoto("");
+    setPhotoPath("");
+    setAcceptedFileSize(true);
+    setAcceptedFileType(true);
     setBirthday(null);
     closeEditContact();
     setIsModalConfirmOpen(false);
@@ -101,6 +120,10 @@ export function EditContact({
         "birthday",
         formatFromFormToPayload(formatToSlashStyle(birthday)),
       );
+    }
+
+    if (!!photo) {
+      formData.append("photo", photo);
     }
 
     await editContact(keyId, formData)
@@ -136,6 +159,21 @@ export function EditContact({
         <WrapperModal>
           <Header4>Edit Contact</Header4>
           <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
+            <AddPhoto
+              file={photo}
+              setFile={(file) => {
+                setPhoto(file);
+              }}
+              path={photoPath}
+              setPath={setPhotoPath}
+              acceptedFileSize={acceptedFileSize}
+              setAcceptedFileSize={setAcceptedFileSize}
+              acceptedFileType={acceptedFileType}
+              setAcceptedFileType={setAcceptedFileType}
+              defaultFileSize={1048576}
+              setHasImgChanged={setHasImgChanged}
+              fileType={[".png", ".jpg"]}
+            />
             <ContainerRow>
               <DefaultInput
                 key="first-name"

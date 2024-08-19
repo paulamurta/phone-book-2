@@ -41,6 +41,7 @@ export function ManageGroups({
       />
       <EditGroup
         keyId={id}
+        setKeyId={setId}
         isEditGroupOpen={isEditGroupOpen}
         closeEditGroup={() => {
           setIsEditGroupOpen(false);

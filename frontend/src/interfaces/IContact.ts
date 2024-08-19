@@ -7,7 +7,7 @@ export interface IContact {
   birthday: string | null;
   favorite: boolean;
   groupId?: string | null;
-  photo?: string | File | null;
+  photo?: string | null;
 }
 
 export interface IContactCreate {

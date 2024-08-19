@@ -101,6 +101,7 @@ function Contacts() {
       />
       <EditContact
         keyId={id}
+        setKeyId={setId}
         isEditContactOpen={isEditContactOpen}
         closeEditContact={() => {
           refetch();

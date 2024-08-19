@@ -21,6 +21,7 @@ import {
   formatFromFormToPayload,
   formatToSlashStyle,
 } from "../../../common/utils/format/formatDate";
+import { AddPhoto } from "../../../components/AddPhoto";
 
 export function NewContact({
   isNewContactOpen,
@@ -32,12 +33,17 @@ export function NewContact({
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [birthday, setBirthday] = useState<Date | null>(null);
-  // const [acceptedFileSize, setAcceptedFileSize] = useState(true);
-  // const [acceptedFileType, setAcceptedFileType] = useState(true);
-  // const [photo, setPhoto] = useState<File | string>("");
-  // const [photoPath, setPhotoPath] = useState<string>("");
+  const [acceptedFileSize, setAcceptedFileSize] = useState(true);
+  const [acceptedFileType, setAcceptedFileType] = useState(true);
+  const [photo, setPhoto] = useState<File | string>("");
+  const [photoPath, setPhotoPath] = useState<string>("");
 
-  const isFormValid = firstName && lastName && phone.length === 10;
+  const isFormValid =
+    firstName &&
+    lastName &&
+    phone.length === 10 &&
+    acceptedFileSize &&
+    acceptedFileType;
 
   function handleCancelModal() {
     setIsModalConfirmOpen(false);
@@ -48,6 +54,10 @@ export function NewContact({
     setLastName("");
     setPhone("");
     setEmail("");
+    setPhoto("");
+    setPhotoPath("");
+    setAcceptedFileSize(true);
+    setAcceptedFileType(true);
     setBirthday(null);
     closeNewContact();
     setIsModalConfirmOpen(false);
@@ -73,9 +83,10 @@ export function NewContact({
         formatFromFormToPayload(formatToSlashStyle(birthday)),
       );
     }
-    // if (photo) {
-    //   formData.append("file", photo);
-    // }
+
+    if (photo) {
+      formData.append("photo", photo);
+    }
 
     await createContact(formData)
       .then(async () => {
@@ -110,6 +121,20 @@ export function NewContact({
         <WrapperModal>
           <Header4>Register Contact</Header4>
           <FormModal onSubmit={handleSubmit} noValidate autoComplete="off">
+            <AddPhoto
+              file={photo}
+              setFile={(file) => {
+                setPhoto(file);
+              }}
+              path={photoPath}
+              setPath={setPhotoPath}
+              acceptedFileSize={acceptedFileSize}
+              setAcceptedFileSize={setAcceptedFileSize}
+              acceptedFileType={acceptedFileType}
+              setAcceptedFileType={setAcceptedFileType}
+              defaultFileSize={1048576}
+              fileType={[".png", ".jpg"]}
+            />
             <ContainerRow>
               <DefaultInput
                 key="first-name"

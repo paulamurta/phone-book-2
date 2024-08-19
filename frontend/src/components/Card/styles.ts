@@ -8,6 +8,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  height: 100%;
   padding: 2vh;
   gap: 1vh;
   width: 100%;
@@ -24,6 +26,37 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.colors.danger.light};
     margin-right: 2vw;
   }
+`;
+
+export const LeftWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1vw;
+`;
+
+export const UserPhotoBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5vh;
+  width: 5vh;
+  border-radius: 50vw !important;
+  background-color: ${({ theme }) => theme.colors.background.deepGray};
+  color: ${({ theme }) => theme.colors.background.white};
+
+  p {
+    font-size: clamp(2vh, 0.3rem + 1.5vh, 3vh);
+    font-family: "Inter 400";
+    text-transform: capitalize;
+  }
+`;
+
+export const UserPhoto = styled.img`
+  height: 100%;
+  width: 100%;
+  border-radius: 50vw;
+  object-fit: cover;
 `;
 
 export const NameAndGroupContainer = styled.div`

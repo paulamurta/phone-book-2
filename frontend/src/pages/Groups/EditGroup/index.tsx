@@ -15,6 +15,7 @@ export function EditGroup({
   isEditGroupOpen,
   closeEditGroup,
   keyId,
+  setKeyId,
 }: EditGroupProps) {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>("");
@@ -38,6 +39,7 @@ export function EditGroup({
   }
 
   function handleCloseModal() {
+    setKeyId("");
     setGroupName("");
     closeEditGroup();
     setIsModalConfirmOpen(false);

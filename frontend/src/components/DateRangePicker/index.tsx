@@ -127,6 +127,7 @@ export default function DateRangePicker({
       <CalendarIconBox
         $disabled={disabled}
         onClick={disabled ? () => {} : () => setIsOpen(!isOpen)}
+        type="button"
       >
         <SvgIcon>
           <Calendar weight="fill" />

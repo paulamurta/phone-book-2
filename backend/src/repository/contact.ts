@@ -124,6 +124,20 @@ class ContactRepository {
   async findById(id: string, ownerId: string): Promise<IContact | undefined> {
     const foundContact = await this.prisma.contact.findUnique({
       where: { id, ownerId },
+      include: {
+        group: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        photo: {
+          select: {
+            mimeType: true,
+            photoData: true,
+          },
+        },
+      },
     });
     return foundContact as IContact;
   }

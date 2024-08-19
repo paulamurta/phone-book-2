@@ -28,8 +28,19 @@ This application can be partially run with Docker Compose.
 
 ### Backend + Database
 
+
+
 1. Clone this repository and navigate to the backend directory
-2. Run Docker Compose
+
+2. ***EXCEPTION: NOTE FOR WINDOWS USERS*** 
+If you encounter issues with the entrypoint.sh file, follow these steps:
+Navigate to the /backend/scripts directory and run the following command:
+```
+dos2unix entrypoint.sh
+```
+This will convert the entrypoint.sh file to a Unix-compatible format. After completing this step, proceed with the standard instructions.
+
+3. Run Docker Compose
 ```
 docker compose up --build
 ```
